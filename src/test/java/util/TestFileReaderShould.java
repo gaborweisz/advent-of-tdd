@@ -1,6 +1,5 @@
 package util;
 
-import org.advent.day1.Calibrator;
 import org.hamcrest.MatcherAssert;
 import org.junit.jupiter.api.Test;
 
@@ -13,7 +12,7 @@ public class TestFileReaderShould {
     void read_a_file_into_a_string_array_list() {
 
        FileReader fr = new FileReader();
-       List<String > aList = fr.readFileAndConvertToStringArray("puzzleinput_day1_a.txt");
+       List<String > aList = fr.readFileAndConvertToStringArray("puzzleinput_day1.txt");
 
        MatcherAssert.assertThat(aList.size(), equalTo(1000));
        MatcherAssert.assertThat(aList.get(0), equalTo("gtlbhbjgkrb5sixfivefivetwosix"));

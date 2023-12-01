@@ -8,8 +8,8 @@ public class Solver {
 
     public static void main(String[] args) {
         var f = new FileReader();
-        List<String> rowsa = f.readFileAndConvertToStringArray("puzzleinput_day1_a.txt");
-        List<String> rowsb = f.readFileAndConvertToStringArray("puzzleinput_day1_b.txt");
+        List<String> rowsa = f.readFileAndConvertToStringArray("puzzleinput_day1.txt");
+        List<String> rowsb = f.readFileAndConvertToStringArray("puzzleinput_day1.txt");
         System.out.println("Solution for day 1 / a : "  + solvePuzzleA(rowsa));
         System.out.println("Solution for day 1 / b : "  + solvePuzzleB(rowsb));
     }
