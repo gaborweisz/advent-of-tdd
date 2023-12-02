@@ -4,6 +4,9 @@ import util.FileReader;
 
 import java.util.List;
 
+/**
+ * Solution for day 1: https://adventofcode.com/2023/day/1
+ */
 public class Solver {
 
     public static void main(String[] args) {
