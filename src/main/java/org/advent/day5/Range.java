@@ -1,5 +1,11 @@
 package org.advent.day5;
 
+/**
+ * Represents a range from the map
+ *
+ * For example :
+ * 50 98 2
+ */
 public class Range {
     double destinationRange;
     double sourceRange;

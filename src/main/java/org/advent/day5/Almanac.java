@@ -3,6 +3,25 @@ package org.advent.day5;
 
 import java.util.*;
 
+/**
+ * The almanac (your puzzle input) lists all of the seeds that need to be planted.
+ * It also lists what type of soil to use with each kind of seed, what type of fertilizer
+ * to use with each kind of soil, what type of water to use with each kind of fertilizer,
+ * and so on.
+ *
+ * For example:
+ *
+ * seeds: 79 14 55 13
+ *
+ * seed-to-soil map:
+ * 50 98 2
+ * 52 50 48
+ *
+ * soil-to-fertilizer map:
+ * 0 15 37
+ * 37 52 2
+ * 39 0 15
+ */
 public class Almanac {
 
     List<Double> seeds;
@@ -13,6 +32,10 @@ public class Almanac {
         parseRows(rows);
     }
 
+    /**
+     * Process the puzzle input and create necessary objects
+     * @param rows
+     */
     private void parseRows(List<String> rows) {
         maps = new LinkedHashMap<>();
         GardenMap currentMap = null;
@@ -33,14 +56,29 @@ public class Almanac {
         }
     }
 
+    /**
+     * Anser to part 1
+     * @return
+     */
     public Double getLowestLocationNumber() {
         return seeds.stream().mapToDouble(this::getCorrespondingLocation).min().getAsDouble();
     }
 
+    /**
+     * Answer to part 2
+     * @return
+     */
     public Double getLowestLocationNumberFromSeedRanges  () {
         return seedRanges.stream().mapToDouble(seedRange -> getLowestLocationNumberFromSeedRange(seedRange.from, seedRange.rangeLength)).min().getAsDouble();
     }
 
+
+    /**
+     * Pocesses a range to find the lowest location number
+     * @param from
+     * @param range
+     * @return lowest location number
+     */
     public Double getLowestLocationNumberFromSeedRange(Double from, Double range) {
         Double min = Double.MAX_VALUE;
         for (Double i = from; i <= from + range-1; i++) {
@@ -56,6 +94,11 @@ public class Almanac {
         return min;
     }
 
+    /**
+     * Get the corresponding location number for a seed number
+     * @param seedNumber
+     * @return lowest location number
+     */
     public Double getCorrespondingLocation(Double seedNumber) {
 
         Double lastSeed = seedNumber;
@@ -66,6 +109,11 @@ public class Almanac {
         return lastSeed;
     }
 
+    /**
+     * Parse the seeds from the first row according to part 1
+     * @param row
+     * @return list of seeds
+     */
     public static List<Double> parseSeeds(String row) {
         if (!row.startsWith("seeds:")) {
             return null;
@@ -80,6 +128,11 @@ public class Almanac {
         return s;
     }
 
+    /**
+     * Parse the seeds from the first row according to part 2
+     * @param row
+     * @return list of seed ranges
+     */
     public static List<SeedRange> parseSeedRanges(String row) {
         List<Double> seeds = parseSeeds(row);
         List<SeedRange> ranges = new ArrayList<>();

@@ -4,6 +4,14 @@ import java.util.AbstractList;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Represents a map from the almanac
+ *
+ * For example :
+ * seed-to-soil map:
+ * 50 98 2
+ * 52 50 48
+ */
 public class GardenMap {
 
     String name;
