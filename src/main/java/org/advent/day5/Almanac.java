@@ -57,7 +57,7 @@ public class Almanac {
     }
 
     /**
-     * Anser to part 1
+     * Answer to part 1
      * @return
      */
     public Double getLowestLocationNumber() {
