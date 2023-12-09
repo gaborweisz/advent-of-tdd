@@ -37,3 +37,10 @@ build/
 
 ### Mac OS ###
 .DS_Store
+/src/main/resources/puzzleinput_day1.txt
+/src/main/resources/puzzleinput_day2.txt
+/src/main/resources/puzzleinput_day3.txt
+/src/main/resources/puzzleinput_day4.txt
+/src/main/resources/puzzleinput_day5.txt
+/src/main/resources/puzzleinput_day7.txt
+/src/main/resources/puzzleinput_day8.txt

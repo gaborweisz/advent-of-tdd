@@ -13,8 +13,8 @@ public class Solver {
         var f = new FileReader();
         List<String> rowsa = f.readFileAndConvertToStringArray("puzzleinput_day1.txt");
         List<String> rowsb = f.readFileAndConvertToStringArray("puzzleinput_day1.txt");
-        System.out.println("Solution for day 1 / a : "  + solvePuzzleA(rowsa));
-        System.out.println("Solution for day 1 / b : "  + solvePuzzleB(rowsb));
+        System.out.printf("Solution for day 1 / a : %d\n" ,solvePuzzleA(rowsa));
+        System.out.printf("Solution for day 1 / b : %d\n" ,solvePuzzleB(rowsb));
     }
 
     public static int solvePuzzleA(List<String> rows)  {

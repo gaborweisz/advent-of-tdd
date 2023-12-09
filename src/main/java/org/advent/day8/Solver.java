@@ -1,19 +1,19 @@
-package org.advent.day4;
+package org.advent.day8;
 
 import util.FileReader;
 
 import java.util.List;
 
 /**
- * Solution for day 4: https://adventofcode.com/2023/day/4
+ * Solution for https://adventofcode.com/2023/day/8
  */
 public class Solver {
 
     public static void main(String[] args) {
         var f = new FileReader();
-        List<String> rows = f.readFileAndConvertToStringArray("puzzleinput_day4.txt");
-        System.out.printf("Solution for day 4 / a : %.0f\n", solvePuzzleA(rows));
-        System.out.printf("Solution for day 4 / b : %.0f\n", solvePuzzleB(rows));
+        List<String> rows = f.readFileAndConvertToStringArray("puzzleinput_day8.txt");
+        System.out.printf("Solution for day 8 / a : %.0f \n" , solvePuzzleA(rows));
+        System.out.printf("Solution for day 8 / b : %.0f \n" , solvePuzzleB(rows));
     }
 
     /**
@@ -24,7 +24,8 @@ public class Solver {
      */
     public static double solvePuzzleA(List<String> rows) {
 
-        return rows.stream().map(Card::parseCard).mapToDouble(Card::calculatePoints).sum();
+        DesertMap map = new DesertMap(rows);
+        return map.findPath();
     }
 
     /**
@@ -35,8 +36,7 @@ public class Solver {
      */
     public static double  solvePuzzleB(List<String> rows) {
 
-        Deck deck = new Deck(rows);
-        deck.calculateCopies();
-        return deck.calculateCards();
+        DesertMap map = new DesertMap(rows);
+        return map.findMultiPathQuick();
     }
 }

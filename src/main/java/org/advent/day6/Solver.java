@@ -19,8 +19,8 @@ public class Solver {
                 new Boat(95, 1391)
         );
 
-        System.out.printf("Solution for day 6 / a : %.0f //n", solvePuzzleA(boats));
-        System.out.printf("Solution for day 6 / b : %.0f//n", solvePuzzleB(new Boat(48938595.0, 296192812361391.0)));
+        System.out.printf("Solution for day 6 / a : %.0f \n", solvePuzzleA(boats));
+        System.out.printf("Solution for day 6 / b : %.0f\n", solvePuzzleB(new Boat(48938595.0, 296192812361391.0)));
     }
 
     /**

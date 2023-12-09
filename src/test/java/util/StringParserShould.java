@@ -1,6 +1,5 @@
 package util;
 
-import org.advent.day3.Solver;
 import org.hamcrest.MatcherAssert;
 import org.junit.jupiter.api.Test;
 
