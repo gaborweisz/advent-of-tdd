@@ -5,7 +5,7 @@ import org.junit.jupiter.api.Test;
 
 import static org.hamcrest.Matchers.equalTo;
 
-public class MathShould {
+public class TestMathShould {
 
     @Test
     void calculate_the_least_common_multiple() {

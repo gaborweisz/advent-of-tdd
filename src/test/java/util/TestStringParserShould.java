@@ -7,7 +7,7 @@ import java.util.ArrayList;
 
 import static org.hamcrest.Matchers.equalTo;
 
-public class StringParserShould {
+public class TestStringParserShould {
 
     @Test
     void read_parse_a_string_into_an_array_list_based_on_a_separator() {

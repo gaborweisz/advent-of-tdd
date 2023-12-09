@@ -10,7 +10,7 @@ import static org.hamcrest.Matchers.equalTo;
 public class TestDesertMapShould {
 
     @Test
-    void calculate_the_solution_for_puzzle_a() {
+    void parse_the_input() {
 
         List<String> input1 = List.of(
                 "RL",
