@@ -46,6 +46,62 @@ public class TestListUtilShould {
         MatcherAssert.assertThat(copiedList2.get(1).get(0), equalTo(4));
         MatcherAssert.assertThat(copiedList2.get(1).get(1), equalTo(5));
         MatcherAssert.assertThat(copiedList2.get(1).get(2), equalTo(6));
+    }
 
+    @Test
+    void convertToCharArrayMatrix_withValidInput_returnsExpectedMatrix() {
+        List<String> stringList = Arrays.asList(
+                "abc",
+                "def",
+                "ghi"
+        );
+
+        char[][] expectedMatrix = {
+                {'a', 'b', 'c'},
+                {'d', 'e', 'f'},
+                {'g', 'h', 'i'}
+        };
+
+        char[][] resultMatrix = ListUtil.convertToCharArrayMatrix(stringList);
+
+        MatcherAssert.assertThat(resultMatrix, equalTo(expectedMatrix));
+    }
+
+    @Test
+    void convertToCharArrayMatrix_withEmptyList_returnsEmptyMatrix() {
+        List<String> stringList = List.of();
+
+        char[][] expectedMatrix = {};
+
+        char[][] resultMatrix = ListUtil.convertToCharArrayMatrix(stringList);
+
+        MatcherAssert.assertThat(resultMatrix, equalTo(expectedMatrix));
+    }
+
+    @Test
+    void convertToCharArrayMatrix_withNullList_returnsEmptyMatrix() {
+        List<String> stringList = null;
+
+        char[][] expectedMatrix = {};
+
+        char[][] resultMatrix = ListUtil.convertToCharArrayMatrix(stringList);
+
+        MatcherAssert.assertThat(resultMatrix, equalTo(expectedMatrix));
+    }
+
+    @Test
+    void convertToCharArrayMatrix_withDifferentLengthStrings_throwsException() {
+        List<String> stringList = Arrays.asList(
+                "abc",
+                "defg",
+                "hi"
+        );
+
+        // Expecting IllegalArgumentException due to strings of different lengths
+        try {
+            ListUtil.convertToCharArrayMatrix(stringList);
+        } catch (IllegalArgumentException e) {
+            MatcherAssert.assertThat(e.getMessage(), equalTo("All strings in the list must have the same length"));
+        }
     }
 }
