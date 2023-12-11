@@ -37,7 +37,9 @@ public class Solver {
     public static double  solvePuzzleB(List<String> rows) {
 
         PipeCrawler pipeCrawler = new PipeCrawler(rows);
-        pipeCrawler.crawlTillTheEndAndMarkEnclosedArea();
+        pipeCrawler.crawlTillTheEnd();
+        pipeCrawler.doublePileOnlyMap();
+
         double result = pipeCrawler.countEnclosedArea();
         pipeCrawler.printMap();
         return result;

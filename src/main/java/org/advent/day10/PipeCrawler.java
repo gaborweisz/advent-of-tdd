@@ -1,6 +1,7 @@
 package org.advent.day10;
 
 import util.ListUtil;
+import util.MatrixUtil;
 
 import java.util.HashMap;
 import java.util.List;
@@ -70,10 +71,10 @@ public class PipeCrawler {
     }
 
 
-    List<Character> bottomborder =  List.of('-', '7', 'F');
-    List<Character> topborder = List.of('-', 'J', 'L');
-    List<Character> leftborder = List.of('|', 'J');
-    List<Character> rightborder = List.of('|', 'F');
+    List<Character> connect_down = List.of('7', 'F', 'S');
+    List<Character> connect_up = List.of('J', 'L', 'S');
+    List<Character> connect_left = List.of('7', 'J', 'S');
+    List<Character> connect_right = List.of('L', 'F', 'S');
 
     Map<Character, Tile> tileMap = new HashMap<>();
 
@@ -90,6 +91,7 @@ public class PipeCrawler {
 
     char[][] pipeMap;
     char[][] pipeOnlyMap; // map that only contains the pipes
+    char[][] doublePileOnlyMap; // map that only contains the pipes
     int posI;
     int posJ;
     Direction direction;
@@ -100,6 +102,9 @@ public class PipeCrawler {
         findStartPosition();
     }
 
+    /**
+     * Find the start position and set the direction
+     */
     public void findStartPosition() {
         for (int i = 0; i < pipeMap.length; i++) {
             for (int j = 0; j < pipeMap[i].length; j++) {
@@ -130,6 +135,9 @@ public class PipeCrawler {
         }
     }
 
+    /**
+     * Initializes the pipe only map with dots
+     */
     void initPipeOnlyMap() {
         pipeOnlyMap = new char[pipeMap.length][pipeMap[0].length];
         for (int i = 0; i < pipeMap.length; i++) {
@@ -139,6 +147,11 @@ public class PipeCrawler {
         }
     }
 
+    /**
+     * Crawls the pipe till the end and returns the number of steps
+     *
+     * @return number of steps (solution a)
+     */
     public double crawlTillTheEnd() {
         Direction previousDirection = direction;
         double counter = 0;
@@ -160,47 +173,72 @@ public class PipeCrawler {
         }
     }
 
-    public double crawlTillTheEndAndMarkEnclosedArea() {
-        Direction previousDirection = direction;
-        double counter = 0;
+
+    /**
+     * Creates a double sized map that will allow us to fill the gaps between the pipes
+     */
+    public void doublePileOnlyMap() {
+        doublePileOnlyMap = MatrixUtil.doubleMatrix(pipeOnlyMap);
+
+        //fill the gaps with pipes
+        for (int i = 0; i < doublePileOnlyMap.length ; i++) {
+            for (int j = 0; j < doublePileOnlyMap[i].length; j++) {
+                if (doublePileOnlyMap[i][j] == '|') {
+                    if (i > 0 && doublePileOnlyMap[i - 1][j] == '.') {
+                        doublePileOnlyMap[i - 1][j] = '|';
+                    }
+                    if (i < doublePileOnlyMap.length - 1 && doublePileOnlyMap[i + 1][j] == '.') {
+                        doublePileOnlyMap[i + 1][j] = '|';
+                    }
+
+                }
+                if (doublePileOnlyMap[i][j] == '-') {
+
+                    if (j > 0 && doublePileOnlyMap[i][j - 1] == '.') {
+                        doublePileOnlyMap[i][j - 1] = '-';
+                    }
+                    if (j < doublePileOnlyMap[i].length - 1 && doublePileOnlyMap[i][j + 1] == '.') {
+                        doublePileOnlyMap[i][j + 1] = '-';
+                    }
+                }
+                if (connect_up.contains(doublePileOnlyMap[i][j])) {
+                    //F 7 < -- connect down
+                    //| | < -- insert the pipe up
+                    //L J < -- connect up
+                    if (i > 2 && doublePileOnlyMap[i - 1][j] == '.' && connect_down.contains(doublePileOnlyMap[i - 2][j])) {
+                        doublePileOnlyMap[i - 1][j] = '|';
+                    }
+                }
+                if (connect_down.contains(doublePileOnlyMap[i][j])) {
+                    //F 7 < -- connect down
+                    //| | < -- insert the pipe dow
+                    //L J < -- connect up
+                    if (i < doublePileOnlyMap.length -2  && doublePileOnlyMap[i + 1][j] == '.' && connect_up.contains(doublePileOnlyMap[i + 2][j])) {
+                        doublePileOnlyMap[i + 1][j] = '|';
+                    }
+                }
+                if (connect_left.contains(doublePileOnlyMap[i][j])) {
+                    //connect right   connect left
+                    //F      -        7 < -- adds pipe to the left
+                    //L      -        J
+                    if (j > 2 && doublePileOnlyMap[i][j-1] == '.' && connect_right.contains(doublePileOnlyMap[i][j-2])) {
+                        doublePileOnlyMap[i][j - 1] = '-';
+                    }
+                }
+                if (connect_right.contains(doublePileOnlyMap[i][j])) {
+                    //connect right   connect left
+                    //F      -        7 < -- adds pipe to the right
+                    //L      -        J
+                    if (j < doublePileOnlyMap[i].length -2  && doublePileOnlyMap[i][j+1] == '.' && connect_left.contains(doublePileOnlyMap[i][j+2])) {
+                        doublePileOnlyMap[i][j + 1] = '-';
+                    }
+                }
 
 
-        while (true) {
-            Tile currentTile = tileMap.get(pipeMap[posI][posJ]);
-            if (currentTile.pipeType == 'S') {
-                //we need the farthest point from start position
-                pipeOnlyMap[posI][posJ] = pipeMap[posI][posJ];
-                return counter % 2 == 0 ? counter / 2 : (counter + 1) / 2;
             }
-            counter++;
-            pipeOnlyMap[posI][posJ] = pipeMap[posI][posJ];
-            direction = currentTile.getNextDirection(previousDirection, posI, posJ);
-
-            markIfEnclosed(posI, posJ, direction);
-            this.posI = currentTile.getI(direction, posI, posJ);
-            this.posJ = currentTile.getJ(direction, posI, posJ);
-
-            previousDirection = direction;
-        }
-    }
-
-    public void markIfEnclosed(int i, int j, Direction direction) {
-
-        if (pipeMap[i][j] == '7' && direction == Direction.DOWN && pipeOnlyMap[i+1][j-1] == '.') {
-            pipeOnlyMap[i+1][j-1] = 'I';
         }
 
-        if (pipeMap[i][j] == 'J' && direction == Direction.LEFT && pipeOnlyMap[i-1][j-1] == '.') {
-            pipeOnlyMap[i-1][j-1] = 'I';
-        }
-
-        if (pipeMap[i][j] == 'L' && direction == Direction.UP && pipeOnlyMap[i-1][j+1] == '.') {
-            pipeOnlyMap[i-1][j+1] = 'I';
-        }
-
-        if (pipeMap[i][j] == 'F' && direction == Direction.RIGHT && pipeOnlyMap[i+1][j+1] == '.')  {
-            pipeOnlyMap[i+1][j+1] = 'I';
-        }
+        MatrixUtil.printMatrix(doublePileOnlyMap);
     }
 
     /**
@@ -209,70 +247,71 @@ public class PipeCrawler {
     public double countEnclosedArea() {
 
         excludeDisclosedAreaFromTheEdges();
-        findEnclosedAreas();
+        findTheOriginalGaps();
         return countEnclosed();
     }
 
-    private void findEnclosedAreas() {
-        for (int i = 0; i < pipeOnlyMap.length; i++) {
-            for (int j = 0; j < pipeOnlyMap[i].length; j++) {
-                if (pipeOnlyMap[i][j] == 'I') {
-                    markEnclosedArea(i, j);
+    /**
+     * Finds the enclosed area from the original (not duplicated) map
+     */
+    private void findTheOriginalGaps() {
+        for (int i = 0; i < doublePileOnlyMap.length; i+=2) {
+            for (int j = 0; j < doublePileOnlyMap[i].length; j+=2) {
+                if (doublePileOnlyMap[i][j] == '.') {
+                    doublePileOnlyMap[i][j] = 'X';
                 }
             }
         }
     }
 
+
+    /**
+     * Goes through the edges of the map and starts marking the disclosed areas
+     */
     private void excludeDisclosedAreaFromTheEdges() {
-        for (int i = 0; i < pipeOnlyMap.length; i++) {
+        for (int i = 0; i < doublePileOnlyMap.length; i++) {
             markDisclosedStatus(i, 0);
-            markDisclosedStatus(i, pipeOnlyMap[i].length-1);
+            markDisclosedStatus(i, doublePileOnlyMap[i].length - 1);
         }
 
-        for (int j = 0; j < pipeOnlyMap[0].length; j++) {
+        for (int j = 0; j < doublePileOnlyMap[0].length; j++) {
             markDisclosedStatus(0, j);
-            markDisclosedStatus(pipeOnlyMap.length - 1, j);
+            markDisclosedStatus(doublePileOnlyMap.length - 1, j);
         }
     }
 
+    /**
+     * Recursively marks the disclosed areas
+     */
     public void markDisclosedStatus(int i, int j) {
-        if (i < 0 || i >= pipeOnlyMap.length || j < 0 || j >= pipeOnlyMap[i].length) {
+        if (i < 0 || i >= doublePileOnlyMap.length || j < 0 || j >= doublePileOnlyMap[i].length) {
             return;
         }
-        if (pipeOnlyMap[i][j] == '.' || pipeOnlyMap[i][j] == 'I' ) {
+        if (doublePileOnlyMap[i][j] == '.' || doublePileOnlyMap[i][j] == 'I') {
             if (disclosed(i, j)) {
-                pipeOnlyMap[i][j] = 'O';
+                doublePileOnlyMap[i][j] = 'O';
             } else {
-                pipeOnlyMap[i][j] = '.';
+                doublePileOnlyMap[i][j] = '.';
             }
-            markDisclosedStatus(i - 1, j);
-            markDisclosedStatus(i + 1, j);
             markDisclosedStatus(i, j - 1);
+            markDisclosedStatus(i - 1, j);
             markDisclosedStatus(i, j + 1);
+            markDisclosedStatus(i + 1, j);
         }
     }
 
-    void markEnclosedArea(int i, int j) {
-        if (i < 0 || i >= pipeOnlyMap.length || j < 0 || j >= pipeOnlyMap[i].length) {
-            return;
-        }
-        if (pipeOnlyMap[i][j] == 'I' || pipeOnlyMap[i][j] == '.') {
-            pipeOnlyMap[i][j] = 'E';
-            markEnclosedArea(i - 1, j);
-            markEnclosedArea(i + 1, j);
-            markEnclosedArea(i, j - 1);
-            markEnclosedArea(i, j + 1);
-        }
-    }
 
+    /**
+     * @return true if the tile is not enclosed by pipes
+     */
     public boolean disclosed(int i, int j) {
 
-        if (i == 0 || i == pipeOnlyMap.length - 1 || j == 0 || j == pipeOnlyMap[i].length - 1) {
+        if (i == 0 || i == doublePileOnlyMap.length - 1 || j == 0 || j == doublePileOnlyMap[i].length - 1) {
             // if we are on the edge of the map, we are not enclosed
             return true;
         }
 
-        if (pipeOnlyMap[i - 1][j] == 'O' || pipeOnlyMap[i + 1][j] == 'O' || pipeOnlyMap[i][j -1 ] == 'O' || pipeOnlyMap[i][j + 1] == 'O') {
+        if (doublePileOnlyMap[i - 1][j] == 'O' || doublePileOnlyMap[i + 1][j] == 'O' || doublePileOnlyMap[i][j - 1] == 'O' || doublePileOnlyMap[i][j + 1] == 'O') {
             // if we are next to a not enclosed tile, we are not enclosed
             return true;
         }
@@ -281,22 +320,28 @@ public class PipeCrawler {
 
     }
 
+    /**
+     * @return the number of enclosed tiles
+     */
     public double countEnclosed() {
         double counter = 0;
-        for (char[] chars : pipeOnlyMap) {
-            for (int j = 0; j < chars.length; j++) {
-                if (chars[j] == 'E') {
+        for (char[] chars : doublePileOnlyMap) {
+            for (char aChar : chars) {
+                if (aChar == 'X') {
                     counter++;
                 }
             }
         }
-        return counter;
+        return counter ;
     }
 
+    /**
+     * Prints the map
+     */
     void printMap() {
-        for (char[] chars : pipeOnlyMap) {
-            for (int j = 0; j < chars.length; j++) {
-                System.out.print(chars[j]);
+        for (char[] chars : doublePileOnlyMap) {
+            for (char aChar : chars) {
+                System.out.print(aChar);
             }
             System.out.println();
         }
