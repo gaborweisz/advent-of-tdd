@@ -1,5 +1,6 @@
 package util;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class MatrixUtil {
@@ -208,4 +209,203 @@ public class MatrixUtil {
 
         return enlargedMatrix;
     }
+
+    /**
+     * Compares the elements in the specified columns of the given matrix
+     *
+     * @param matrix    the matrix containing the row
+     * @param column1  the index of column 1
+     * @param column2 the index of column 2
+     * @return true if the two columns matches, false otherwise
+     */
+    public static boolean compareColumns(char[][] matrix, int column1, int column2) {
+        // Check if the matrix is valid
+        if (matrix == null || matrix.length == 0 || matrix[0].length <= Math.max(column1, column2)) {
+            throw new IllegalArgumentException("Invalid matrix or column indexes");
+        }
+
+        // Iterate through the rows and compare corresponding elements in the specified columns
+        for (int i = 0; i < matrix.length; i++) {
+            if (matrix[i][column1] != matrix[i][column2]) {
+                return false; // Columns don't match
+            }
+        }
+
+        return true; // All elements in the specified columns match
+    }
+
+    /**
+     * Compares the elements in the specified columns of the given matrix
+     *
+     * @param matrix    the matrix containing the row
+     * @param row1  the index of column 1
+     * @param row2 the index of column 2
+     * @return true if the two columns matches, false otherwise
+     */
+    public static boolean compareRows(char[][] matrix, int row1, int row2) {
+        // Check if the matrix is valid
+        if (matrix == null || matrix.length == 0 || matrix.length <= Math.max(row1, row2)) {
+            throw new IllegalArgumentException("Invalid matrix or column indexes");
+        }
+
+        // Iterate through the rows and compare corresponding elements in the specified columns
+        for (int i = 0; i < matrix[0].length; i++) {
+            if (matrix[row1][i] != matrix[row2][i]) {
+                return false; // Columns don't match
+            }
+        }
+
+        return true; // All elements in the specified columns match
+    }
+
+    /**
+     * Finds all columns in the given matrix that are mirror images of each other
+     * @param matrix the matrix to be searched
+     * @return list of column indexes that are mirror images of each other in the given matrix. Only include the leftmost column of each pair of mirror columns.
+     */
+    public static List<Integer> findMirrorColumns(char[][] matrix) {
+        // Check if the matrix is valid
+        if (matrix == null || matrix.length == 0) {
+            throw new IllegalArgumentException("Invalid matrix");
+        }
+
+        List<Integer> mirrorColumns = new ArrayList<>();
+
+        // Iterate through the columns and compare it with the next column
+        for (int i = 0; i < matrix[0].length-1; i++) {
+            if (compareColumns(matrix, i, i + 1)) {
+                mirrorColumns.add(i);
+            }
+        }
+
+        return mirrorColumns;
+    }
+
+    /**
+     * Finds all rows in the given matrix that are mirror images of each other
+     * @param matrix the matrix to be searched
+     * @return list of row indexes that are mirror images of each other in the given matrix. Only include the topmost row of each pair of mirror rows.
+     */
+    public static List<Integer> findMirrorRows(char[][] matrix) {
+        // Check if the matrix is valid
+        if (matrix == null || matrix.length == 0) {
+            throw new IllegalArgumentException("Invalid matrix");
+        }
+
+        List<Integer> mirrorRows = new ArrayList<>();
+
+        // Iterate through the columns and compare it with the next column
+        for (int i = 0; i < matrix.length-1; i++) {
+            if (compareRows(matrix, i, i + 1)) {
+                mirrorRows.add(i);
+            }
+        }
+
+        return mirrorRows;
+    }
+
+    /**
+     * Converts the given string to a matrix of the specified size
+     * @param input the string to be converted
+     * @param rows number of rows in the matrix
+     * @param cols number of columns in the matrix
+     * @return the matrix containing the characters in the given string
+     */
+    public static char[][] convertStringToMatrix(String input, int rows, int cols) {
+        char[][] matrix = new char[rows][cols];
+
+        for (int i = 0; i < rows; i++) {
+            for (int j = 0; j < cols; j++) {
+                matrix[i][j] = input.charAt(i * cols + j);
+            }
+        }
+
+        return matrix;
+    }
+
+    /**
+     * Checks if the given column index is a vertical mirror axis in the given matrix
+     * @param matrix the matrix to be converted
+     * @param columnIndex the index of the column to be checked
+     * @return true if the given column index is a vertical mirror axis in the given matrix, false otherwise
+     */
+    public static boolean isVerticalMirrorAxis(char[][] matrix, int columnIndex) {
+        // Check if the matrix is valid
+        if (matrix == null || matrix.length == 0 || matrix[0].length <= columnIndex || columnIndex < 0) {
+            throw new IllegalArgumentException("Invalid matrix");
+        }
+
+        if (columnIndex == matrix[0].length - 1) {
+            // The last column cannot be a vertical mirror axis
+            return false;
+        }
+
+        for (int j = columnIndex, i = columnIndex + 1; j >= 0 && i < matrix[0].length; j--) {
+            if (!compareColumns(matrix, j, i)) {
+                return false;
+            }
+            i++;
+        }
+
+        return true;
+    }
+
+    /**
+     * Checks if the given ros index is a horizontal mirror axis in the given matrix
+     * @param matrix the matrix to be converted
+     * @param rowIndex the index of the row to be checked
+     * @return true if the given row index is a horizontal mirror axis in the given matrix, false otherwise
+     */
+    public static boolean isHorizontalMirrorAxis(char[][] matrix, int rowIndex) {
+        // Check if the matrix is valid
+        if (matrix == null || matrix.length == 0 || matrix.length <= rowIndex || rowIndex < 0) {
+            throw new IllegalArgumentException("Invalid matrix");
+        }
+
+        if (rowIndex == matrix.length - 1) {
+            // The last row cannot be a vertical mirror axis
+            return false;
+        }
+
+        for (int j = rowIndex, i = rowIndex + 1; j >= 0 && i < matrix.length; j--) {
+            if (!compareRows(matrix, j, i)) {
+                return false;
+            }
+            i++;
+        }
+
+        return true;
+    }
+
+    /**
+     * Finds the index of the vertical mirror axis in the given matrix
+     * @param matrix the matrix to be processed
+     * @return the index of the vertical mirror axis in the given matrix, -1 if there is no vertical mirror axis
+     */
+    public static int getVerticalMirrorAxisIndex(char[][] matrix) {
+
+        for (int i = 0; i < matrix[0].length; i++) {
+            if (isVerticalMirrorAxis(matrix, i)) {
+                return i;
+            }
+        }
+        return -1;
+    }
+
+    /**
+     * Finds the index of the horizontal mirror axis in the given matrix
+     * @param matrix the matrix to be processed
+     * @return the index of the horizontal mirror axis in the given matrix, -1 if there is no horizontal mirror axis
+     */
+    public static int getHorizontalMirrorAxisIndex(char[][] matrix) {
+
+        for (int i = 0; i < matrix.length; i++) {
+            if (isHorizontalMirrorAxis(matrix, i)) {
+                return i;
+            }
+        }
+        return -1;
+    }
+
+
 }

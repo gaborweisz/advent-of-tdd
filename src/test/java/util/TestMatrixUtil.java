@@ -3,7 +3,6 @@ package util;
 import org.hamcrest.MatcherAssert;
 import org.junit.jupiter.api.Test;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import static org.hamcrest.Matchers.equalTo;
@@ -12,7 +11,7 @@ public class TestMatrixUtil {
     @Test
     void double_the_matrix() {
         char[][] matrix = {{'a', 'b'},
-                           {'c', 'd'}};
+                {'c', 'd'}};
         char[][] doubledMatrix = MatrixUtil.doubleMatrix(matrix);
         char[][] expectedMatrix = {
                 {'a', '.', 'b', '.'},
@@ -34,7 +33,7 @@ public class TestMatrixUtil {
         int emptyRowIndex = 3;
         int nonEmptyRowIndex = 0;
 
-        MatcherAssert.assertThat(MatrixUtil.isRowEmpty(matrix, emptyRowIndex, ' ' ), equalTo(true));
+        MatcherAssert.assertThat(MatrixUtil.isRowEmpty(matrix, emptyRowIndex, ' '), equalTo(true));
         MatcherAssert.assertThat(MatrixUtil.isRowEmpty(matrix, nonEmptyRowIndex, ' '), equalTo(false));
     }
 
@@ -50,7 +49,7 @@ public class TestMatrixUtil {
         int emptyColIndex = 2;
         int nonEmptyColIndex = 1;
 
-        MatcherAssert.assertThat(MatrixUtil.isColumnEmpty(matrix, emptyColIndex, ' ' ), equalTo(true));
+        MatcherAssert.assertThat(MatrixUtil.isColumnEmpty(matrix, emptyColIndex, ' '), equalTo(true));
         MatcherAssert.assertThat(MatrixUtil.isColumnEmpty(matrix, nonEmptyColIndex, ' '), equalTo(false));
     }
 
@@ -70,7 +69,7 @@ public class TestMatrixUtil {
                 {'.', 'j', 'k', '.', 'l'}
         };
 
-        char[][] enlargedMatrix = MatrixUtil.addNewColumns(matrix, List.of( 0, 2), '.');
+        char[][] enlargedMatrix = MatrixUtil.addNewColumns(matrix, List.of(0, 2), '.');
         assert MatrixUtil.areEqual(enlargedMatrix, expectedMatrix);
 
     }
@@ -94,9 +93,191 @@ public class TestMatrixUtil {
 
         };
 
-        char[][] enlargedMatrix = MatrixUtil.addNewRows(matrix, List.of( 0, 2), '.');
+        char[][] enlargedMatrix = MatrixUtil.addNewRows(matrix, List.of(0, 2), '.');
         assert MatrixUtil.areEqual(enlargedMatrix, expectedMatrix);
 
+    }
+
+    @Test
+    public void compare_columns() {
+        char[][] matrix = {
+                {1, 1, 3},
+                {4, 4, 6},
+                {7, 7, 9}
+        };
+
+        int matchingColumn1 = 0;
+        int matchingColumn2 = 1;
+        int nonMatchingColumn = 2;
+
+        MatcherAssert.assertThat(MatrixUtil.compareColumns(matrix, matchingColumn1, matchingColumn2), equalTo(true));
+        MatcherAssert.assertThat(MatrixUtil.compareColumns(matrix, matchingColumn1, nonMatchingColumn), equalTo(false));
+        MatcherAssert.assertThat(MatrixUtil.compareColumns(matrix, matchingColumn2, nonMatchingColumn), equalTo(false));
+    }
+
+    @Test
+    public void compare_rows() {
+        char[][] matrix = {
+                {1, 1, 3},
+                {1, 1, 3},
+                {7, 7, 9}
+        };
+
+        int matchingRow1 = 0;
+        int matchingRow2 = 1;
+        int nonMatchingRow = 2;
+
+        MatcherAssert.assertThat(MatrixUtil.compareRows(matrix, matchingRow1, matchingRow2), equalTo(true));
+        MatcherAssert.assertThat(MatrixUtil.compareRows(matrix, matchingRow1, nonMatchingRow), equalTo(false));
+        MatcherAssert.assertThat(MatrixUtil.compareRows(matrix, matchingRow2, nonMatchingRow), equalTo(false));
+    }
+
+    @Test
+    public void find_mirror_columns() {
+        char[][] matrix = {
+                {1, 1, 3, 3},
+                {4, 4, 6, 6},
+                {7, 7, 9, 9},
+                {1, 1, 3, 3},
+                {7, 7, 9, 9}
+        };
+
+        var mirrorColumns = MatrixUtil.findMirrorColumns(matrix);
+
+        MatcherAssert.assertThat(mirrorColumns.size(), equalTo(2));
+        MatcherAssert.assertThat(mirrorColumns.get(0), equalTo(0));
+        MatcherAssert.assertThat(mirrorColumns.get(1), equalTo(2));
+
+    }
+
+    @Test
+    public void find_mirror_rows() {
+        char[][] matrix = {
+                {4, 4, 6, 6},
+                {4, 4, 6, 6},
+                {7, 7, 9, 9},
+                {1, 1, 3, 3},
+                {1, 1, 3, 3},
+        };
+
+        var mirrorRows = MatrixUtil.findMirrorRows(matrix);
+
+        MatcherAssert.assertThat(mirrorRows.size(), equalTo(2));
+        MatcherAssert.assertThat(mirrorRows.get(0), equalTo(0));
+        MatcherAssert.assertThat(mirrorRows.get(1), equalTo(3));
+
+    }
+
+    @Test
+    public void convert_string_matrix_to_char_matrix() {
+        String inputString =
+                "#.##..##." +
+                "..#.##.#." +
+                "##......#" +
+                "##......#" +
+                "..#.##.#." +
+                "..##..##." +
+                "#.#.##.#.";
+
+        char[][] expectedMatrix = {
+                {'#', '.', '#', '#', '.', '.', '#', '#', '.'},
+                {'.', '.', '#', '.', '#', '#', '.', '#', '.'},
+                {'#', '#', '.', '.', '.', '.', '.', '.', '#'},
+                {'#', '#', '.', '.', '.', '.', '.', '.', '#'},
+                {'.', '.', '#', '.', '#', '#', '.', '#', '.'},
+                {'.', '.', '#', '#', '.', '.', '#', '#', '.'},
+                {'#', '.', '#', '.', '#', '#', '.', '#', '.'}};
+
+        char[][] matrix = MatrixUtil.convertStringToMatrix(inputString, 7, 9);
+
+        MatrixUtil.printMatrix(matrix);
+
+
+        MatcherAssert.assertThat(MatrixUtil.areEqual(matrix, expectedMatrix), equalTo(true));
+
+    }
+
+    @Test
+    public void find_vertical_mirror_axis() {
+        char[][] matrix = {
+                {'#', '.', '#', '#', '.', '.', '#', '#', '.'},
+                {'.', '.', '#', '.', '#', '#', '.', '#', '.'},
+                {'#', '#', '.', '.', '.', '.', '.', '.', '#'},
+                {'#', '#', '.', '.', '.', '.', '.', '.', '#'},
+                {'.', '.', '#', '.', '#', '#', '.', '#', '.'},
+                {'.', '.', '#', '#', '.', '.', '#', '#', '.'},
+                {'#', '.', '#', '.', '#', '#', '.', '#', '.'}};
+
+
+        MatcherAssert.assertThat(MatrixUtil.isVerticalMirrorAxis(matrix, 0), equalTo(false));
+        MatcherAssert.assertThat(MatrixUtil.isVerticalMirrorAxis(matrix, 1), equalTo(false));
+        MatcherAssert.assertThat(MatrixUtil.isVerticalMirrorAxis(matrix, 2), equalTo(false));
+        MatcherAssert.assertThat(MatrixUtil.isVerticalMirrorAxis(matrix, 3), equalTo(false));
+        MatcherAssert.assertThat(MatrixUtil.isVerticalMirrorAxis(matrix, 4), equalTo(true));
+        MatcherAssert.assertThat(MatrixUtil.isVerticalMirrorAxis(matrix, 5), equalTo(false));
+        MatcherAssert.assertThat(MatrixUtil.isVerticalMirrorAxis(matrix, 6), equalTo(false));
+        MatcherAssert.assertThat(MatrixUtil.isVerticalMirrorAxis(matrix, 7), equalTo(false));
+        MatcherAssert.assertThat(MatrixUtil.isVerticalMirrorAxis(matrix, 8), equalTo(false));
+
+    }
+
+
+    @Test
+    public void check_horizontal_mirror_axis() {
+        String inputString =
+                "#...##..#" +
+                "#....#..#" +
+                "..##..###" +
+                "#####.##." +
+                "#####.##." +
+                "..##..###" +
+                "#....#..#";
+
+        char[][] matrix = MatrixUtil.convertStringToMatrix(inputString, 7, 9);
+
+
+        MatcherAssert.assertThat(MatrixUtil.isHorizontalMirrorAxis(matrix, 0), equalTo(false));
+        MatcherAssert.assertThat(MatrixUtil.isHorizontalMirrorAxis(matrix, 1), equalTo(false));
+        MatcherAssert.assertThat(MatrixUtil.isHorizontalMirrorAxis(matrix, 2), equalTo(false));
+        MatcherAssert.assertThat(MatrixUtil.isHorizontalMirrorAxis(matrix, 3), equalTo(true));
+        MatcherAssert.assertThat(MatrixUtil.isHorizontalMirrorAxis(matrix, 4), equalTo(false));
+        MatcherAssert.assertThat(MatrixUtil.isHorizontalMirrorAxis(matrix, 5), equalTo(false));
+        MatcherAssert.assertThat(MatrixUtil.isHorizontalMirrorAxis(matrix, 6), equalTo(false));
+
+
+    }
+
+
+    @Test
+    public void find_vertical_mirror_axis_index() {
+        char[][] matrix = {
+                {'#', '.', '#', '#', '.', '.', '#', '#', '.'},
+                {'.', '.', '#', '.', '#', '#', '.', '#', '.'},
+                {'#', '#', '.', '.', '.', '.', '.', '.', '#'},
+                {'#', '#', '.', '.', '.', '.', '.', '.', '#'},
+                {'.', '.', '#', '.', '#', '#', '.', '#', '.'},
+                {'.', '.', '#', '#', '.', '.', '#', '#', '.'},
+                {'#', '.', '#', '.', '#', '#', '.', '#', '.'}};
+
+
+        MatcherAssert.assertThat(MatrixUtil.getVerticalMirrorAxisIndex(matrix), equalTo(4));
+    }
+
+    @Test
+    public void find_horizontal_mirror_axis_index() {
+        String inputString =
+                "#...##..#" +
+                "#....#..#" +
+                "..##..###" +
+                "#####.##." +
+                "#####.##." +
+                "..##..###" +
+                "#....#..#";
+
+        char[][] matrix = MatrixUtil.convertStringToMatrix(inputString, 7, 9);
+
+
+        MatcherAssert.assertThat(MatrixUtil.getHorizontalMirrorAxisIndex(matrix), equalTo(3));
     }
 
 }

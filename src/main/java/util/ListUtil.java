@@ -41,4 +41,34 @@ public class ListUtil {
 
         return charMatrix;
     }
+
+    /**
+     * Convert a list of strings to a list of char matrices. The strings in the list are separated by empty strings.
+     * @param stringList list of strings
+     * @return list of char matrices
+     */
+    public static List<char[][]> convertToCharMatrixList(List<String> stringList) {
+        if (stringList == null || stringList.isEmpty()) {
+            return new ArrayList<>(); // Return an empty matrix if the list is null or empty
+        }
+
+        List<char[][]> charMatrix = new ArrayList<>();
+
+        List<String> currentStringList = new ArrayList<>();
+
+        for (String s : stringList) {
+            if (s.isEmpty()) {
+                charMatrix.add(convertToCharArrayMatrix(currentStringList));
+                currentStringList.clear();
+            } else {
+                currentStringList.add(s);
+            }
+        }
+
+        if (!currentStringList.isEmpty()) {
+            charMatrix.add(convertToCharArrayMatrix(currentStringList));
+        }
+
+        return charMatrix;
+    }
 }
