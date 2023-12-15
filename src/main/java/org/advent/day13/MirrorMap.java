@@ -22,8 +22,8 @@ public class MirrorMap {
         List<char[][]> maps = ListUtil.convertToCharMatrixList(input);
 
         for (char[][] map : maps) {
-            int verticalMirrorAxisIndex = MatrixUtil.getVerticalMirrorAxisIndex(map);
-            int horizontalMirrorAxisIndex = MatrixUtil.getHorizontalMirrorAxisIndex(map);
+            int verticalMirrorAxisIndex = MatrixUtil.getVerticalMirrorAxisIndex(map, -1);
+            int horizontalMirrorAxisIndex = MatrixUtil.getHorizontalMirrorAxisIndex(map, -1);
 
             count += horizontalMirrorAxisIndex == -1 ? 0 : (horizontalMirrorAxisIndex + 1) * 100;
             count += verticalMirrorAxisIndex == -1 ? 0 : verticalMirrorAxisIndex + 1;
@@ -40,24 +40,23 @@ public class MirrorMap {
         List<char[][]> maps = ListUtil.convertToCharMatrixList(input);
 
         for (char[][] map : maps) {
-            int verticalMirrorAxisIndexOrig = MatrixUtil.getVerticalMirrorAxisIndex(map);
-            int horizontalMirrorAxisIndexOrig = MatrixUtil.getHorizontalMirrorAxisIndex(map);
-            System.out.println("Map before fixing smudge:");
-            MatrixUtil.printMatrix(map);
+            int verticalMirrorAxisIndexOrig = MatrixUtil.getVerticalMirrorAxisIndex(map, -1);
+            int horizontalMirrorAxisIndexOrig = MatrixUtil.getHorizontalMirrorAxisIndex(map, -1);
+
             map = fixSmudge(map);
-            System.out.println("Map after fixing smudge:");
-            MatrixUtil.printMatrix(map);
 
+            int verticalMirrorAxisIndexNew = MatrixUtil.getVerticalMirrorAxisIndex(map, verticalMirrorAxisIndexOrig);
+            int horizontalMirrorAxisIndexNew = MatrixUtil.getHorizontalMirrorAxisIndex(map, horizontalMirrorAxisIndexOrig);
 
-            int verticalMirrorAxisIndexNew = MatrixUtil.getVerticalMirrorAxisIndex(map);
-            int horizontalMirrorAxisIndexNew = MatrixUtil.getHorizontalMirrorAxisIndex(map);
+            if (verticalMirrorAxisIndexNew != -1 && verticalMirrorAxisIndexNew != verticalMirrorAxisIndexOrig) {
 
-            if (verticalMirrorAxisIndexNew != verticalMirrorAxisIndexOrig) {
-                count += verticalMirrorAxisIndexNew == -1 ? 0 : verticalMirrorAxisIndexNew + 1;
+                System.out.println(">>>>>>>>>>>>> New vert axis. Found at " + verticalMirrorAxisIndexNew );
+                count += (verticalMirrorAxisIndexNew + 1);
             }
 
-            if (horizontalMirrorAxisIndexNew != horizontalMirrorAxisIndexOrig) {
-                count += horizontalMirrorAxisIndexNew == -1 ? 0 : (horizontalMirrorAxisIndexNew + 1) * 100;
+            if (horizontalMirrorAxisIndexNew != -1 && horizontalMirrorAxisIndexNew != horizontalMirrorAxisIndexOrig) {
+                System.out.println(">>>>>>>>>>>>> New horiz axis. Found at " + horizontalMirrorAxisIndexNew);
+                count += (horizontalMirrorAxisIndexNew + 1) * 100;
             }
 
         }
@@ -67,12 +66,20 @@ public class MirrorMap {
 
 
     public static char[][] fixSmudge(char[][] map) {
-        int verticalMirrorAxisIndex = MatrixUtil.getVerticalMirrorAxisIndex(map);
-        int horizontalMirrorAxisIndex = MatrixUtil.getHorizontalMirrorAxisIndex(map);
+        int verticalMirrorAxisIndex = MatrixUtil.getVerticalMirrorAxisIndex(map, -1);
+        int horizontalMirrorAxisIndex = MatrixUtil.getHorizontalMirrorAxisIndex(map, -1);
 
         if (verticalMirrorAxisIndex == -1 && horizontalMirrorAxisIndex == -1) {
             return map;
         }
+
+        System.out.println("------------------------------");
+        System.out.println("Map before fixing smudge:");
+        System.out.println("vert : " + verticalMirrorAxisIndex + " horiz : " + horizontalMirrorAxisIndex);
+        MatrixUtil.printMatrix(map);
+        System.out.println("------------------------------");
+        System.out.println("Map after fixing smudge:");
+        System.out.println("------------------------------");
 
         for (int i = 0; i < map.length; i++) {
             for (int j = 0; j < map[i].length; j++) {
@@ -84,14 +91,21 @@ public class MirrorMap {
                     map[i][j] = '.';
                 }
 
-                int verticalMirrorAxisIndexNew = MatrixUtil.getVerticalMirrorAxisIndex(map);
-                int horizontalMirrorAxisIndexNew = MatrixUtil.getHorizontalMirrorAxisIndex(map);
+                int verticalMirrorAxisIndexNew = MatrixUtil.getVerticalMirrorAxisIndex(map, verticalMirrorAxisIndex);
+                int horizontalMirrorAxisIndexNew = MatrixUtil.getHorizontalMirrorAxisIndex(map, horizontalMirrorAxisIndex);
 
                 if (horizontalMirrorAxisIndexNew != -1 && horizontalMirrorAxisIndex != horizontalMirrorAxisIndexNew) {
+
+                    System.out.println("New horiz axis. Found smudge at " + i + " " + j + " || vert axis " + verticalMirrorAxisIndexNew + " horiz axis : " + horizontalMirrorAxisIndexNew);
+                    System.out.println("------------------------------");
+                    MatrixUtil.printMatrix(map);
                     return map;
                 }
 
                 if (verticalMirrorAxisIndexNew != -1 && verticalMirrorAxisIndex != verticalMirrorAxisIndexNew) {
+                    System.out.println("New vertical axis. Found smudge at " + i + " " + j + " || vert axis " + verticalMirrorAxisIndexNew + " horiz axis : " + horizontalMirrorAxisIndexNew);
+                    System.out.println("------------------------------");
+                    MatrixUtil.printMatrix(map);
                     return map;
                 }
 
@@ -103,6 +117,9 @@ public class MirrorMap {
                 }
             }
         }
+
+        System.out.println("------------------------------");
+        System.out.println("------------------------------");
 
         return map;
     }

@@ -382,9 +382,12 @@ public class MatrixUtil {
      * @param matrix the matrix to be processed
      * @return the index of the vertical mirror axis in the given matrix, -1 if there is no vertical mirror axis
      */
-    public static int getVerticalMirrorAxisIndex(char[][] matrix) {
+    public static int getVerticalMirrorAxisIndex(char[][] matrix, int skipIndex) {
 
         for (int i = 0; i < matrix[0].length; i++) {
+            if (i == skipIndex) {
+                continue;
+            }
             if (isVerticalMirrorAxis(matrix, i)) {
                 return i;
             }
@@ -397,9 +400,12 @@ public class MatrixUtil {
      * @param matrix the matrix to be processed
      * @return the index of the horizontal mirror axis in the given matrix, -1 if there is no horizontal mirror axis
      */
-    public static int getHorizontalMirrorAxisIndex(char[][] matrix) {
+    public static int getHorizontalMirrorAxisIndex(char[][] matrix, int skipIndex) {
 
         for (int i = 0; i < matrix.length; i++) {
+            if (i == skipIndex) {
+                continue;
+            }
             if (isHorizontalMirrorAxis(matrix, i)) {
                 return i;
             }

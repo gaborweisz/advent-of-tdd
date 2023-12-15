@@ -260,7 +260,7 @@ public class TestMatrixUtil {
                 {'#', '.', '#', '.', '#', '#', '.', '#', '.'}};
 
 
-        MatcherAssert.assertThat(MatrixUtil.getVerticalMirrorAxisIndex(matrix), equalTo(4));
+        MatcherAssert.assertThat(MatrixUtil.getVerticalMirrorAxisIndex(matrix, -1), equalTo(4));
     }
 
     @Test
@@ -277,7 +277,7 @@ public class TestMatrixUtil {
         char[][] matrix = MatrixUtil.convertStringToMatrix(inputString, 7, 9);
 
 
-        MatcherAssert.assertThat(MatrixUtil.getHorizontalMirrorAxisIndex(matrix), equalTo(3));
+        MatcherAssert.assertThat(MatrixUtil.getHorizontalMirrorAxisIndex(matrix, -1), equalTo(3));
     }
 
 }
