@@ -9,7 +9,7 @@ import java.util.Scanner;
 public class FileReader {
 
     public  List<String> readFileAndConvertToStringArray(String filename) {
-        List<String> rows = new ArrayList<String>();
+        List<String> rows = new ArrayList<>();
 
         try {
             File file = new File("src/main/resources/"+filename);
@@ -29,4 +29,17 @@ public class FileReader {
         return rows;
     }
 
+    public String readFileAndConvertToString(String filename) {
+        try {
+            File file = new File("src/main/resources/"+filename);
+            Scanner myReader = new Scanner(file);
+
+            return myReader.nextLine();
+
+        } catch (FileNotFoundException e) {
+            System.out.println("File does not exist");
+            e.printStackTrace();
+            return "";
+        }
+    }
 }
