@@ -1,5 +1,6 @@
 package util;
 
+import org.advent.day14.ReflectorDish;
 import org.hamcrest.MatcherAssert;
 import org.junit.jupiter.api.Test;
 
@@ -19,6 +20,21 @@ public class TestMatrixUtil {
                 {'c', '.', 'd', '.'},
                 {'.', '.', '.', '.'}};
         assert MatrixUtil.areEqual(doubledMatrix, expectedMatrix);
+    }
+
+    @Test
+    public void copy_a_matrix() {
+        char[][] matrix = {
+                {4, 4, 6, 6},
+                {4, 4, 6, 6},
+                {7, 7, 9, 9},
+                {1, 1, 3, 3},
+                {1, 1, 3, 3},
+        };
+
+        char[][] copy = MatrixUtil.copyMatrix(matrix);
+
+        MatcherAssert.assertThat(MatrixUtil.areEqual(matrix, copy), equalTo(true));
     }
 
     @Test
@@ -279,5 +295,148 @@ public class TestMatrixUtil {
 
         MatcherAssert.assertThat(MatrixUtil.getHorizontalMirrorAxisIndex(matrix, -1), equalTo(3));
     }
+
+    @Test
+    void tilt_the_dish_north() {
+
+        List<String> input = List.of(
+                "O....#...." ,
+                "O.OO#....#" ,
+                ".....##..." ,
+                "OO.#O....O" ,
+                ".O.....O#." ,
+                "O.#..O.#.#" ,
+                "..O..#O..O" ,
+                ".......O.." ,
+                "#....###.." ,
+                "#OO..#....");
+
+        List<String> expectedResult = List.of(
+                "OOOO.#.O.." ,
+                "OO..#....#" ,
+                "OO..O##..O" ,
+                "O..#.OO..." ,
+                "........#." ,
+                "..#....#.#" ,
+                "..O..#.O.O" ,
+                "..O......." ,
+                "#....###.." ,
+                "#....#....");
+
+        char[][] result = MatrixUtil.tiltNorth(ListUtil.convertToCharArrayMatrix(input));
+
+        System.out.println("Tilted North");
+        MatrixUtil.printMatrix(result);
+
+        MatcherAssert.assertThat(MatrixUtil.areEqual(result,ListUtil.convertToCharArrayMatrix(expectedResult)), equalTo(true));
+
+    }
+
+    @Test
+    void tilt_the_dish_east() {
+
+        List<String> input = List.of(
+                "O....#...." ,
+                "O.OO#....#" ,
+                ".....##..." ,
+                "OO.#O....O" ,
+                ".O.....O#." ,
+                "O.#..O.#.#" ,
+                "..O..#O..O" ,
+                ".......O.." ,
+                "#....###.." ,
+                "#OO..#....");
+
+        List<String> expectedResult = List.of(
+                "....O#...." ,
+                ".OOO#....#" ,
+                ".....##..." ,
+                ".OO#....OO" ,
+                "......OO#." ,
+                ".O#...O#.#" ,
+                "....O#..OO" ,
+                ".........O" ,
+                "#....###.." ,
+                "#..OO#....");
+
+
+        char[][] result = MatrixUtil.tiltEast(ListUtil.convertToCharArrayMatrix(input));
+
+        System.out.println("Tilted East");
+        MatrixUtil.printMatrix(result);
+
+        MatcherAssert.assertThat(MatrixUtil.areEqual(result,ListUtil.convertToCharArrayMatrix(expectedResult)), equalTo(true));
+    }
+
+    @Test
+    void tilt_the_dish_west() {
+
+        List<String> input = List.of(
+                "O....#...." ,
+                "O.OO#....#" ,
+                ".....##..." ,
+                "OO.#O....O" ,
+                ".O.....O#." ,
+                "O.#..O.#.#" ,
+                "..O..#O..O" ,
+                ".......O.." ,
+                "#....###.." ,
+                "#OO..#....");
+
+        List<String> expectedResult = List.of(
+                "O....#...." ,
+                "OOO.#....#" ,
+                ".....##..." ,
+                "OO.#OO...." ,
+                "OO......#." ,
+                "O.#O...#.#" ,
+                "O....#OO.." ,
+                "O........." ,
+                "#....###.." ,
+                "#OO..#....");
+
+        char[][] result = MatrixUtil.tiltWest(ListUtil.convertToCharArrayMatrix(input));
+
+        System.out.println("Tilted West");
+        MatrixUtil.printMatrix(result);
+
+        MatcherAssert.assertThat(MatrixUtil.areEqual(result,ListUtil.convertToCharArrayMatrix(expectedResult)), equalTo(true));
+    }
+
+    @Test
+    void tilt_the_dish_south() {
+
+        List<String> input = List.of(
+                "O....#...." ,
+                "O.OO#....#" ,
+                ".....##..." ,
+                "OO.#O....O" ,
+                ".O.....O#." ,
+                "O.#..O.#.#" ,
+                "..O..#O..O" ,
+                ".......O.." ,
+                "#....###.." ,
+                "#OO..#....");
+
+        List<String> expectedResult = List.of(
+                ".....#...." ,
+                "....#....#" ,
+                "...O.##..." ,
+                "...#......" ,
+                "O.O....O#O" ,
+                "O.#..O.#.#" ,
+                "O....#...." ,
+                "OO....OO.." ,
+                "#OO..###.." ,
+                "#OO.O#...O");
+
+        char[][] result = MatrixUtil.tiltSouth(ListUtil.convertToCharArrayMatrix(input));
+
+        System.out.println("Tilted South");
+        MatrixUtil.printMatrix(result);
+
+        MatcherAssert.assertThat(MatrixUtil.areEqual(result,ListUtil.convertToCharArrayMatrix(expectedResult)), equalTo(true));
+    }
+
 
 }

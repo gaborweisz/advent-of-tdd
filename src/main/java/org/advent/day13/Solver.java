@@ -5,7 +5,7 @@ import util.FileReader;
 import java.util.List;
 
 /**
- * Solution for https://adventofcode.com/2023/day/11
+ * Solution for https://adventofcode.com/2023/day/13
  */
 public class Solver {
 

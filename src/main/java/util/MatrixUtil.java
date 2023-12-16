@@ -70,6 +70,19 @@ public class MatrixUtil {
         }
     }
 
+    /**
+     * Copies the given matrix
+     */
+    public static char[][]  copyMatrix(char[][] matrix) {
+        char[][] copy = new char[matrix.length][matrix[0].length];
+        for (int i = 0; i < matrix.length; i++) {
+            for (int j = 0; j < matrix[0].length; j++) {
+               copy[i][j] = matrix[i][j];
+            }
+        }
+        return copy;
+    }
+
 
     /**
      * Checks if the given row is empty
@@ -411,6 +424,97 @@ public class MatrixUtil {
             }
         }
         return -1;
+    }
+
+
+    /**
+     * Moves all stones represented by 'O' north until it's blocked.Empty fields are represented by '.'.
+     * @param dish matrix to be tilted
+     * @return the dish after tilting north
+     */
+    public static char[][] tiltNorth(char[][] dish) {
+
+        char[][] newDish = MatrixUtil.copyMatrix(dish);
+
+        for (int k = 1; k < newDish.length; k++) {
+            for (int i = 1; i < newDish.length; i++) {
+                for (int j = 0; j < newDish[0].length; j++) {
+                    if (newDish[i - 1][j] == '.' && newDish[i][j] == 'O') {
+                        //move one step north
+                        newDish[i][j] = '.';
+                        newDish[i - 1][j] = 'O';
+                    }
+                }
+            }
+        }
+        return newDish;
+    }
+
+    /**
+     * Moves all stones represented by 'O' south until it's blocked. Empty fields are represented by '.'.
+     * @param dish matrix to be tilted
+     * @return the dish after tilting south
+     */
+    public static char[][] tiltSouth(char[][] dish) {
+
+        char[][] newDish = MatrixUtil.copyMatrix(dish);
+
+        for (int k = 1; k < newDish.length; k++) {
+            for (int i = newDish.length - 2; i >= 0; i--) {
+                for (int j = 0; j < newDish[0].length; j++) {
+                    if (newDish[i +1][j] == '.' && newDish[i][j] == 'O') {
+                        //move one step south
+                        newDish[i][j] = '.';
+                        newDish[i + 1][j] = 'O';
+                    }
+                }
+            }
+        }
+        return newDish;
+    }
+
+    /**
+     * Moves all stones represented by 'O' west until it's blocked.Empty fields are represented by '.'.
+     * @param dish matrix to be tilted
+     * @return the dish after tilting west
+     */
+    public static char[][] tiltWest(char[][] dish) {
+        char[][] newDish = MatrixUtil.copyMatrix(dish);
+
+        for (int k = 1; k < newDish[0].length; k++) {
+            for (int i = 0; i < newDish.length; i++) {
+                for (int j = 1; j < newDish[0].length; j++) {
+                    if (newDish[i][j-1] == '.' && newDish[i][j] == 'O') {
+                        //move one step north
+                        newDish[i][j] = '.';
+                        newDish[i][j-1] = 'O';
+                    }
+                }
+            }
+        }
+        return newDish;
+    }
+
+    /**
+     * Moves all stones represented by 'O' east until it's blocked.Empty fields are represented by '.'.
+     * @param dish matrix to be tilted
+     * @return the dish after tilting east
+     */
+    public static char[][] tiltEast(char[][] dish) {
+        char[][] newDish = MatrixUtil.copyMatrix(dish);
+
+        for (int k = 1; k < newDish[0].length; k++) {
+            for (int i = 0; i < newDish.length; i++) {
+                for (int j = newDish[0].length - 2; j >=0; j--) {
+                    if (newDish[i][j+1] == '.' && newDish[i][j] == 'O') {
+                        //move one step north
+                        newDish[i][j] = '.';
+                        newDish[i][j+1] = 'O';
+                    }
+                }
+            }
+        }
+        return newDish;
     }
 
 
