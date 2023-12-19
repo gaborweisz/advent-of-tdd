@@ -13,6 +13,11 @@ public class ConditionRecord {
         }
     }
 
+    /**
+     * Calculates the solution for puzzle a
+     *
+     * @return solution
+     */
     public int calculateArrangements() {
         int arrangements = 0    ;
         for (ConditionRow conditionRow : conditionRows) {

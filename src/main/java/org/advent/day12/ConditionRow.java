@@ -1,9 +1,6 @@
 package org.advent.day12;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 public class ConditionRow {
 
@@ -18,6 +15,10 @@ public class ConditionRow {
         calculateVariations();
     }
 
+    /**
+     * Calculates arrangements for this row
+     * @return number of arrangements
+     */
     public int calculateArrangements() {
         for (List<DamagedSpring> damagedSpringList : damagedSpringLists) {
             String pattern = getVariationPattern(damagedSpringList);
@@ -25,9 +26,33 @@ public class ConditionRow {
                 variations.add(pattern);
             }
         }
+
+        ArrayList<String> arrayList = new ArrayList(variations);
+        Collections.sort(arrayList);
+
+        printDetails(arrayList);
         return variations.size();
     }
 
+    private void printDetails(ArrayList<String> arrayList) {
+        System.out.print("Variations: " + variations.size() + " - ");
+        for (DamagedSpring d : damagedSprings) {
+            System.out.print(d.length + ",");
+        }
+        System.out.println();
+        System.out.println(condition);
+        System.out.println("---------------------------");
+        for (String pattern : arrayList) {
+            System.out.println(pattern);
+        }
+        System.out.println("\n\n-========================");
+    }
+
+    /**
+     * Compares the condition with the pattern
+     * @param pattern pattern to compare
+     * @return true if condition matches pattern
+     */
     public boolean matchVariationPattern(String pattern) {
 
         for (int i = 0; i < pattern.length(); i++) {
@@ -44,10 +69,21 @@ public class ConditionRow {
             }
         }
 
-        System.out.println("Pattern: " + pattern + " Condition: " + condition);
+        if (condition.length() > pattern.length()) {
+            String sub = condition.substring(pattern.length());
+            if (sub.contains("#")) {
+                return false;
+            }
+        }
+
         return true;
     }
 
+    /**
+     * Creates a pattern based on the arrangement of the damaged springs
+     * @param damagedSpringList
+     * @return patter in string format
+     */
     private String getVariationPattern(List<DamagedSpring> damagedSpringList) {
         StringBuilder pattern = new StringBuilder();
         int shift = 1;
@@ -58,17 +94,20 @@ public class ConditionRow {
         return pattern.toString();
     }
 
+    /**
+     * Calculates all possible arrangements for this row
+     */
     public void calculateVariations() {
-
         damagedSpringLists.add(damagedSprings);
         nextArrangement(damagedSprings);
-
-        for (List<DamagedSpring> damagedSpringList : damagedSpringLists) {
-            //System.out.println(getVariationPattern(damagedSpringList));
-        }
     }
 
-    public List<DamagedSpring> nextArrangement(List<DamagedSpring> currentDamagedSprings) {
+
+    /**
+     * Recursive method to calculate all possible arrangements
+     * @param currentDamagedSprings current arrangement
+     */
+    public void nextArrangement(List<DamagedSpring> currentDamagedSprings) {
 
         for (int i = currentDamagedSprings.size()-1; i >=0 ;i--) {
 
@@ -78,21 +117,31 @@ public class ConditionRow {
             int length = calculateLength(shiftedDamagedSprings);
 
             if (length > this.rowLength) {
-                return null;
+                return;
             } else {
                 damagedSpringLists.add(shiftedDamagedSprings);
                 nextArrangement(shiftedDamagedSprings);
             }
         }
-        return damagedSprings;
     }
 
+    /**
+     * Calculates the length of the row based on the last damaged spring
+     * @param damagedSprings damaged springs
+     * @return length of row
+     */
     public int calculateLength(List<DamagedSpring> damagedSprings) {
         DamagedSpring lastDamagedSpring = damagedSprings.get(damagedSprings.size() - 1);
 
         return lastDamagedSpring.position + lastDamagedSpring.length - 1;
     }
 
+    /**
+     * Shifts the positions of the damaged springs by 1 starting from the given position
+     * @param damagedSprings damaged springs to shift
+     * @param position tp start to shift
+     * @return shifted damaged springs
+     */
     public List<DamagedSpring> shiftPositions(List<DamagedSpring> damagedSprings, int position) {
         List<DamagedSpring> shiftedDamagedSprings = new ArrayList<>();
         for (DamagedSpring damagedSpring : damagedSprings) {
@@ -106,6 +155,10 @@ public class ConditionRow {
 
     }
 
+    /**
+     * Parses the input row
+     * @param conditionRow input row
+     */
     private void parseConditionRow(String conditionRow) {
 
         String[] parts = conditionRow.split(" ");

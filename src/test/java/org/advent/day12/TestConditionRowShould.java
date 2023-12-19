@@ -16,9 +16,9 @@ public class TestConditionRowShould {
 
         MatcherAssert.assertThat(conditionRow.condition, equalTo("???.###"));
         MatcherAssert.assertThat(conditionRow.damagedSprings.size(), equalTo(3));
-        MatcherAssert.assertThat(conditionRow.damagedSprings.get(0), equalTo(1));
-        MatcherAssert.assertThat(conditionRow.damagedSprings.get(1), equalTo(1));
-        MatcherAssert.assertThat(conditionRow.damagedSprings.get(2), equalTo(3));
+        MatcherAssert.assertThat(conditionRow.damagedSprings.get(0).length, equalTo(1));
+        MatcherAssert.assertThat(conditionRow.damagedSprings.get(1).length, equalTo(1));
+        MatcherAssert.assertThat(conditionRow.damagedSprings.get(2).length, equalTo(3));
 
     }
 
@@ -40,6 +40,22 @@ public class TestConditionRowShould {
         MatcherAssert.assertThat(new ConditionRow("????.######..#####. 1,6,5").calculateArrangements(), equalTo(4));
         MatcherAssert.assertThat(new ConditionRow("?###???????? 3,2,1").calculateArrangements(), equalTo(10));
     }
+
+    @Test
+    void calculate_arrangements_2() {
+        MatcherAssert.assertThat(new ConditionRow("???????????? 1,1,1,1").calculateArrangements(), equalTo(126));
+    }
+
+    @Test
+    void calculate_arrangements_3() {
+        MatcherAssert.assertThat(new ConditionRow("?##?#??????????##. 11,3").calculateArrangements(), equalTo(2));
+    }
+
+    @Test
+    void calculate_arrangements_4() {
+        MatcherAssert.assertThat(new ConditionRow("?.?????.##..??? 1,2,1").calculateArrangements(), equalTo(18));
+    }
+
 
     @Test
     void init_position_map() {
