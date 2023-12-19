@@ -8,7 +8,7 @@ public class MatrixUtil {
     /**
      * Doubles the given matrix by adding empty spaces between the elements
      *
-     * @param originalMatrix
+     * @param originalMatrix the matrix to be doubled
      * @return the doubled matrix
      */
     public static char[][] doubleMatrix(char[][] originalMatrix) {
@@ -38,8 +38,8 @@ public class MatrixUtil {
     /**
      * Checks if the given matrices are equal
      *
-     * @param matrix1
-     * @param matrix2
+     * @param matrix1 the first matrix
+     * @param matrix2  the second matrix
      * @return ture if equal, false otherwise
      */
     public static boolean areEqual(char[][] matrix1, char[][] matrix2) {
@@ -59,12 +59,36 @@ public class MatrixUtil {
     }
 
     /**
+     *Cuts the submatrix from the given matrix
+     * @param matrix  the matrix from which the submatrix will be cut
+     * @param startRow the row from which the submatrix starts (inclusive)
+     * @param endRow the row at which the submatrix ends (inclusive)
+     * @param startCol the column from which the submatrix starts (inclusive)
+     * @param endCol    the column at which the submatrix ends (inclusive)
+     * @return the submatrix
+     */
+    public static char[][]  cutMatrix(char[][] matrix, int startRow, int startCol, int endRow, int endCol) {
+        char[][] cutMatrix = new char[endRow - startRow + 1][endCol - startCol + 1];
+
+        for (int i = startRow; i <= endRow; i++) {
+            if (endCol + 1 - startCol >= 0)
+                System.arraycopy(matrix[i], startCol, cutMatrix[i - startRow], 0, endCol + 1 - startCol);
+        }
+
+        return cutMatrix;
+    }
+
+    /**
      * Prints the given matrix
      */
     public static void printMatrix(char[][] matrix) {
         for (char[] row : matrix) {
             for (char cell : row) {
-                System.out.print(cell);
+                if (cell == '\u0000') {
+                    System.out.print('.');
+                } else {
+                    System.out.print(cell);
+                }
             }
             System.out.println();
         }
@@ -76,11 +100,35 @@ public class MatrixUtil {
     public static char[][]  copyMatrix(char[][] matrix) {
         char[][] copy = new char[matrix.length][matrix[0].length];
         for (int i = 0; i < matrix.length; i++) {
-            for (int j = 0; j < matrix[0].length; j++) {
-               copy[i][j] = matrix[i][j];
-            }
+            System.arraycopy(matrix[i], 0, copy[i], 0, matrix[0].length);
         }
         return copy;
+    }
+
+    /**
+     * Fills the matrix with the givenn character
+     */
+    public static void fillMatrix(char[][] matrix, char filler) {
+        for (int i = 0; i < matrix.length; i++) {
+            for (int j = 0; j < matrix[0].length; j++) {
+                matrix[i][j] = filler;
+            }
+        }
+    }
+
+    /**
+     * Counts the number of occurrences of the given character in the matrix
+     */
+    public static int countField(char[][] matrix, char c) {
+        int count = 0;
+        for (char[] chars : matrix) {
+            for (int j = 0; j < matrix[0].length; j++) {
+                if (chars[j] == c) {
+                    count++;
+                }
+            }
+        }
+        return count;
     }
 
 
@@ -123,8 +171,8 @@ public class MatrixUtil {
             return false;
         }
 
-        for (int rowIndex = 0; rowIndex < matrix.length; rowIndex++) {
-            if (matrix[rowIndex][colIndex] != emptyCell) {
+        for (char[] chars : matrix) {
+            if (chars[colIndex] != emptyCell) {
                 // If any cell in the column is not the empty cell, the column is not empty
                 return false;
             }
@@ -238,8 +286,8 @@ public class MatrixUtil {
         }
 
         // Iterate through the rows and compare corresponding elements in the specified columns
-        for (int i = 0; i < matrix.length; i++) {
-            if (matrix[i][column1] != matrix[i][column2]) {
+        for (char[] chars : matrix) {
+            if (chars[column1] != chars[column2]) {
                 return false; // Columns don't match
             }
         }
@@ -371,7 +419,7 @@ public class MatrixUtil {
      */
     public static boolean isHorizontalMirrorAxis(char[][] matrix, int rowIndex) {
         // Check if the matrix is valid
-        if (matrix == null || matrix.length == 0 || matrix.length <= rowIndex || rowIndex < 0) {
+        if (matrix == null || matrix.length <= rowIndex || rowIndex < 0) {
             throw new IllegalArgumentException("Invalid matrix");
         }
 

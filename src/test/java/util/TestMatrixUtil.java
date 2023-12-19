@@ -38,6 +38,28 @@ public class TestMatrixUtil {
     }
 
     @Test
+    public void cut_a_matrix() {
+        char[][] matrix = {
+                {4, 4, 6, 6},
+                {4, 4, 6, 6},
+                {7, 7, 9, 9},
+                {1, 1, 3, 3},
+                {1, 1, 3, 3},
+        };
+
+        char[][] cut = MatrixUtil.cutMatrix(matrix,1,1,3,3);
+
+        char[][] expected = {
+                {4, 6, 6},
+                {7, 9, 9},
+                {1, 3, 3},
+        };
+
+
+        MatcherAssert.assertThat(MatrixUtil.areEqual(cut, expected), equalTo(true));
+    }
+
+    @Test
     public void test_is_row_empty() {
         char[][] matrix = {
                 {'a', 'b', 'c'},
