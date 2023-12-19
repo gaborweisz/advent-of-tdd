@@ -3,12 +3,10 @@ package org.advent.day18;
 public class DigStep {
 
     char direction;
-    int steps;
-    String rgb;
+    long steps;
 
-    public DigStep(char direction, int steps, String rgb) {
+    public DigStep(char direction, long steps) {
         this.direction = direction;
         this.steps = steps;
-        this.rgb = rgb;
     }
 }

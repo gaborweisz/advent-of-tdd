@@ -35,10 +35,8 @@ public class TestDiggerShould {
         MatcherAssert.assertThat(digger.steps.size(), equalTo(14));
         MatcherAssert.assertThat(digger.steps.get(0).direction, equalTo('R'));
         MatcherAssert.assertThat(digger.steps.get(0).steps, equalTo(6));
-        MatcherAssert.assertThat(digger.steps.get(0).rgb, equalTo("#70c710"));
         MatcherAssert.assertThat(digger.steps.get(13).direction, equalTo('U'));
         MatcherAssert.assertThat(digger.steps.get(13).steps, equalTo(2));
-        MatcherAssert.assertThat(digger.steps.get(13).rgb, equalTo("#7a21e3"));
 
     }
 

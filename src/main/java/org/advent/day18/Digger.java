@@ -44,7 +44,6 @@ public class Digger {
         int j = startJ;
         field[i][j] = '#';
         for (DigStep step : steps) {
-            System.out.println(step.direction + " " + step.steps + " " + step.rgb);
             for (int k = 0; k < step.steps; k++) {
                 switch (step.direction) {
                     case 'R' -> j++;
@@ -89,8 +88,7 @@ public class Digger {
             String[] parts = s.split(" ");
             char direction = parts[0].charAt(0);
             int steps = Integer.parseInt(parts[1]);
-            String rgb = parts[2].substring(1,8);
-            DigStep step = new DigStep(direction, steps, rgb);
+            DigStep step = new DigStep(direction, steps);
             this.steps.add(step);
         }
     }
