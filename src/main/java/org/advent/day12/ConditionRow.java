@@ -10,6 +10,11 @@ public class ConditionRow {
     List<List<DamagedSpring>> damagedSpringLists = new ArrayList<>();
     Set<String> variations = new HashSet<>();
 
+    public ConditionRow(String conditionRow, int fold) {
+        parseConditionRowAndFold(conditionRow, fold);
+        calculateVariations();
+    }
+
     public ConditionRow(String conditionRow) {
         parseConditionRow(conditionRow);
         calculateVariations();
@@ -17,6 +22,7 @@ public class ConditionRow {
 
     /**
      * Calculates arrangements for this row
+     *
      * @return number of arrangements
      */
     public int calculateArrangements() {
@@ -27,7 +33,7 @@ public class ConditionRow {
             }
         }
 
-        ArrayList<String> arrayList = new ArrayList(variations);
+        ArrayList<String> arrayList = new ArrayList<>(variations);
         Collections.sort(arrayList);
 
         printDetails(arrayList);
@@ -50,6 +56,7 @@ public class ConditionRow {
 
     /**
      * Compares the condition with the pattern
+     *
      * @param pattern pattern to compare
      * @return true if condition matches pattern
      */
@@ -71,9 +78,7 @@ public class ConditionRow {
 
         if (condition.length() > pattern.length()) {
             String sub = condition.substring(pattern.length());
-            if (sub.contains("#")) {
-                return false;
-            }
+            return !sub.contains("#");
         }
 
         return true;
@@ -81,6 +86,7 @@ public class ConditionRow {
 
     /**
      * Creates a pattern based on the arrangement of the damaged springs
+     *
      * @param damagedSpringList
      * @return patter in string format
      */
@@ -105,11 +111,12 @@ public class ConditionRow {
 
     /**
      * Recursive method to calculate all possible arrangements
+     *
      * @param currentDamagedSprings current arrangement
      */
     public void nextArrangement(List<DamagedSpring> currentDamagedSprings) {
 
-        for (int i = currentDamagedSprings.size()-1; i >=0 ;i--) {
+        for (int i = currentDamagedSprings.size() - 1; i >= 0; i--) {
 
             DamagedSpring damagedSpring = currentDamagedSprings.get(i);
             List<DamagedSpring> shiftedDamagedSprings = shiftPositions(currentDamagedSprings, damagedSpring.position);
@@ -127,6 +134,7 @@ public class ConditionRow {
 
     /**
      * Calculates the length of the row based on the last damaged spring
+     *
      * @param damagedSprings damaged springs
      * @return length of row
      */
@@ -138,8 +146,9 @@ public class ConditionRow {
 
     /**
      * Shifts the positions of the damaged springs by 1 starting from the given position
+     *
      * @param damagedSprings damaged springs to shift
-     * @param position tp start to shift
+     * @param position       tp start to shift
      * @return shifted damaged springs
      */
     public List<DamagedSpring> shiftPositions(List<DamagedSpring> damagedSprings, int position) {
@@ -157,6 +166,7 @@ public class ConditionRow {
 
     /**
      * Parses the input row
+     *
      * @param conditionRow input row
      */
     private void parseConditionRow(String conditionRow) {
@@ -171,6 +181,37 @@ public class ConditionRow {
             this.damagedSprings.add(new DamagedSpring(pos, length));
             pos += length + 1;
         }
+    }
+
+    /**
+     * Parses the input row
+     *
+     * @param conditionRow input row
+     */
+    private void parseConditionRowAndFold(String conditionRow, int numOfFolding) {
+
+        String[] parts = conditionRow.split(" ");
+        this.condition = fold(numOfFolding, parts[0], "?");
+        this.rowLength = condition.length();
+        String damagedSpringsStringFolded = fold(5, parts[1], ",");
+        String[] damagedSpringsStrings = damagedSpringsStringFolded.split(",");
+
+        int pos = 1;
+        for (String damagedSpringString : damagedSpringsStrings) {
+            int length = Integer.parseInt(damagedSpringString);
+            this.damagedSprings.add(new DamagedSpring(pos, length));
+            pos += length + 1;
+        }
+    }
+
+    private String fold(int numOfFolding, String conditionUnfolded, String separator) {
+        StringBuilder sb = new StringBuilder();
+        for (int j = 0; j < numOfFolding - 1; j++) {
+            sb.append(conditionUnfolded);
+            sb.append(separator);
+        }
+        sb.append(conditionUnfolded);
+        return sb.toString();
     }
 
 }

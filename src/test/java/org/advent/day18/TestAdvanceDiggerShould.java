@@ -63,7 +63,11 @@ public class TestAdvanceDiggerShould {
 
         AdvancedDigger digger = new AdvancedDigger(input);
 
+        double capacity = digger.calculateTrenchCapacity();
 
-        MatcherAssert.assertThat(digger.calculateTrenchCapacity(), equalTo(952408144115.0));
+        System.out.printf("Capacity: %.0f \n" , capacity);
+        System.out.printf("Diff : %.0f \n" ,  952408144115.0 - capacity);
+
+        MatcherAssert.assertThat(capacity, equalTo(952408144115.0));
     }
 }

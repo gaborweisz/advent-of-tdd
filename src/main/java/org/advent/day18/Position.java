@@ -5,7 +5,7 @@ import java.util.Objects;
 /**
  * Represents a position in the field
  */
-public class Position implements Comparable<Position>{
+public class Position implements Comparable<Position> {
 
     long i;
     long j;
@@ -20,14 +20,17 @@ public class Position implements Comparable<Position>{
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Position position = (Position) o;
-        return Long.compare(position.i, i) == 0;
+        return this.i == position.i && this.j == position.j;
     }
 
     @Override
     public int compareTo(Position o) {
-        if (this.j == o.j) {
-            return 0;
+        if (this.i > o.i) {
+            return 1;
+        } else if (this.i < o.i) {
+            return -1;
+        } else {
+            return Long.compare(this.j, o.j);
         }
-        return this.j > o.j ? 1 : -1;
     }
 }
