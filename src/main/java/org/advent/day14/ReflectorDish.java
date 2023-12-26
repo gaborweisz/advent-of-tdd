@@ -1,7 +1,7 @@
 package org.advent.day14;
 
 import util.MatrixUtil;
-import util.Tuple;
+import util.Pair;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,7 +24,7 @@ public class ReflectorDish {
     }
 
     public static char[][] effectiveSpin(char[][] dish, int cycles) {
-        Tuple<Integer> repeat = calculateRepeat(dish, cycles);
+        Pair<Integer> repeat = calculateRepeat(dish, cycles);
         int first = repeat.getFirst();
         int second = repeat.getSecond();
         int cyclesToRepeat = second - first;
@@ -32,7 +32,7 @@ public class ReflectorDish {
         return spin(dish, first + (cycles - first) % cyclesToRepeat);
     }
 
-    public static Tuple<Integer> calculateRepeat(char[][] dish, int cycles) {
+    public static Pair<Integer> calculateRepeat(char[][] dish, int cycles) {
         char[][] newDish = MatrixUtil.copyMatrix(dish);
         List<char[][]> dishes = new ArrayList<>();
 
@@ -56,7 +56,7 @@ public class ReflectorDish {
                     index1 = i;
 
                 } else {
-                    return new Tuple(index1, i);
+                    return new Pair(index1, i);
                 }
             } else {
                 dishes.add(newDish);
@@ -64,7 +64,7 @@ public class ReflectorDish {
 
 
         }
-        return new Tuple(-1, -1);
+        return new Pair(-1, -1);
     }
 
     public static char[][] spin(char[][] dish, int cycles) {

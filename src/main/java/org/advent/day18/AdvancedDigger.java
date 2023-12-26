@@ -1,7 +1,7 @@
 package org.advent.day18;
 
 
-import util.Tuple;
+import util.Pair;
 
 import java.util.*;
 
@@ -12,7 +12,7 @@ public class AdvancedDigger {
 
     List<DigStep> steps = new ArrayList<>();
     List<Position> positions = new ArrayList<>();
-    List<Tuple<Position>> rectangles = new ArrayList<>();
+    List<Pair<Position>> rectangles = new ArrayList<>();
 
     public AdvancedDigger(List<String> digPlan) {
         parsePlan(digPlan);
@@ -29,7 +29,7 @@ public class AdvancedDigger {
         slice(positions) ;
 
         double size = 0;
-        for (Tuple<Position> rect : rectangles) {
+        for (Pair<Position> rect : rectangles) {
             double a = Math.abs(rect.getFirst().i - rect.getSecond().i);
             double b = Math.abs(rect.getFirst().j - rect.getSecond().j);
             size += a * b;
@@ -60,7 +60,7 @@ public class AdvancedDigger {
 
                     if (pos2.i == pos3.i && pos2.j != pos3.j) {
                         //bottom right position of rectangle
-                        rectangles.add(new Tuple<>(topLeft, pos3));
+                        rectangles.add(new Pair<>(topLeft, pos3));
                         positionsCopy.remove(i);
                         positionsCopy.remove(0);
 

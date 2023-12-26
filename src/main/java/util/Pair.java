@@ -1,11 +1,11 @@
 package util;
 
-public class Tuple2<T, V> {
+public class Pair<T>  {
 
     T first;
-    V second;
+    T second;
 
-    public Tuple2(T first, V second) {
+    public Pair(T first, T second) {
         this.first = first;
         this.second = second;
     }
@@ -14,7 +14,7 @@ public class Tuple2<T, V> {
         return first;
     }
 
-    public V getSecond() {
+    public T getSecond() {
         return second;
     }
 
@@ -22,7 +22,7 @@ public class Tuple2<T, V> {
         this.first = first;
     }
 
-    public void setSecond(V second) {
+    public void setSecond(T second) {
         this.second = second;
     }
 
@@ -34,4 +34,3 @@ public class Tuple2<T, V> {
                 '}';
     }
 }
-

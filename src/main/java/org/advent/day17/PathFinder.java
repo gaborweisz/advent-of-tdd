@@ -3,8 +3,8 @@ package org.advent.day17;
 
 import util.ListUtil;
 import util.MatrixUtil;
-import util.Tuple;
-import util.Tuple2;
+import util.Pair;
+import util.Pair2;
 
 import java.util.HashMap;
 import java.util.List;
@@ -27,7 +27,7 @@ public class PathFinder {
     int[][] heatMap;
     int[][] weightedHeatMap;
     char[][] routeMap;
-    Tuple<Integer> destinationPos;
+    Pair<Integer> destinationPos;
 
     Map<Direction, Direction> opposite = new HashMap<>();
 
@@ -53,7 +53,7 @@ public class PathFinder {
         heatMap = ListUtil.convertToIntArrayMatrix(rows);
         routeMap = new char[heatMap.length][heatMap[0].length];
         MatrixUtil.fillMatrix(routeMap, '.');
-        destinationPos = new Tuple<>(heatMap.length - 1, heatMap[0].length - 1);
+        destinationPos = new Pair<>(heatMap.length - 1, heatMap[0].length - 1);
         calculateWeightedHeatMap();
 
         System.out.println("Heat");
@@ -97,7 +97,7 @@ public class PathFinder {
         routeMap[x][y] = '#';
 
         while (true) {
-            Tuple2<Direction, Integer> bestRoute = findBestDirectionAndSteps(direction, forbiddenDirection, x, y, LEVEL);
+            Pair2<Direction, Integer> bestRoute = findBestDirectionAndSteps(direction, forbiddenDirection, x, y, LEVEL);
 
             //System.out.println("Best route: " + bestRoute + " from " + x + "," + y);
 
@@ -146,9 +146,9 @@ public class PathFinder {
 
     }
 
-    Tuple2<Direction, Integer> findBestDirectionAndSteps(Direction currentDirection, Direction forbiddenDirection, int startX, int startY, int level) {
+    Pair2<Direction, Integer> findBestDirectionAndSteps(Direction currentDirection, Direction forbiddenDirection, int startX, int startY, int level) {
         int minHeat = Integer.MAX_VALUE;
-        Tuple2<Direction, Integer> bestRoute = null;
+        Pair2<Direction, Integer> bestRoute = null;
 
         for (Direction d : Direction.values()) {
             //System.out.println("Direction analysed :  " + d);
@@ -169,7 +169,7 @@ public class PathFinder {
             //System.out.println("Heat: " + heat + " for " + d);
             if (heat < minHeat) {
                 minHeat = heat;
-                bestRoute = new Tuple2<>(d, 1);
+                bestRoute = new Pair2<>(d, 1);
             }
 
         }
