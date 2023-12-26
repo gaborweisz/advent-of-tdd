@@ -95,6 +95,22 @@ public class MatrixUtil {
     }
 
     /**
+     * Prints the given matrix
+     */
+    public static void printMatrix(int[][] matrix) {
+        for (int[] row : matrix) {
+            for (int cell : row) {
+                if (cell == '\u0000') {
+                    System.out.print('.');
+                } else {
+                    System.out.print(cell + " ");
+                }
+            }
+            System.out.println();
+        }
+    }
+
+    /**
      * Copies the given matrix
      */
     public static char[][]  copyMatrix(char[][] matrix) {

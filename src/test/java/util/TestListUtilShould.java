@@ -67,6 +67,26 @@ public class TestListUtilShould {
         MatcherAssert.assertThat(resultMatrix, equalTo(expectedMatrix));
     }
 
+
+    @Test
+    void convertToIntArrayMatrix_withValidInput_returnsExpectedMatrix() {
+        List<String> stringList = Arrays.asList(
+                "123",
+                "456",
+                "789"
+        );
+
+        int[][] expectedMatrix = {
+                {1,2,3},
+                {4,5,6},
+                {7,8,9}
+        };
+
+        int[][] resultMatrix = ListUtil.convertToIntArrayMatrix(stringList);
+
+        MatcherAssert.assertThat(resultMatrix, equalTo(expectedMatrix));
+    }
+
     @Test
     void convertToCharArrayMatrix_withEmptyList_returnsEmptyMatrix() {
         List<String> stringList = List.of();

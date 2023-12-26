@@ -42,6 +42,30 @@ public class ListUtil {
         return charMatrix;
     }
 
+    public static int[][] convertToIntArrayMatrix(List<String> stringList) {
+        if (stringList == null || stringList.isEmpty()) {
+            return new int[0][0]; // Return an empty matrix if the list is null or empty
+        }
+
+        int numRows = stringList.size();
+        int numCols = stringList.get(0).length();
+
+        int[][] charMatrix = new int[numRows][numCols];
+
+        for (int i = 0; i < numRows; i++) {
+            String currentString = stringList.get(i);
+            if (currentString.length() != numCols) {
+                throw new IllegalArgumentException("All strings in the list must have the same length");
+            }
+
+            for (int j = 0; j < numCols; j++) {
+                charMatrix[i][j] = Character.getNumericValue(currentString.charAt(j));
+            }
+        }
+
+        return charMatrix;
+    }
+
     /**
      * Convert a list of strings to a list of char matrices. The strings in the list are separated by empty strings.
      * @param stringList list of strings
