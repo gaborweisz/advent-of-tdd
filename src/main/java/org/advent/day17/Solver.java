@@ -28,6 +28,9 @@ public class Solver {
         //1129  too high
         //1116 too high
         //1096 too high
+        //1075 not right
+        //1078 not right
+        //1055 not right
         PathFinder pathFinder = new PathFinder(rows);
         pathFinder.findPath();
         return  pathFinder.calculateTotalHeat();

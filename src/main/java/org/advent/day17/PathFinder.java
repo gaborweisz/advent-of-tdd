@@ -20,9 +20,9 @@ enum Direction {
 
 public class PathFinder {
 
-    static final double HEAT_WEIGHT = 1;
-    static final double  POSITION_WEIGHT = 0.5;
-    static final int LEVEL = 20;
+    static final double HEAT_WEIGHT = 4;
+    static final double POSITION_WEIGHT = 0.5;
+    static final int LEVEL = 18;
 
     int[][] heatMap;
     int[][] weightedHeatMap;
@@ -69,7 +69,7 @@ public class PathFinder {
         for (int i = 0; i < heatMap.length; i++) {
             for (int j = 0; j < heatMap[0].length; j++) {
                 int distance = distance(i, j, destinationPos.getFirst(), destinationPos.getSecond());
-                weightedHeatMap[i][j] = (int)(heatMap[i][j] * HEAT_WEIGHT) + (int)(distance * POSITION_WEIGHT);
+                weightedHeatMap[i][j] = (int) (heatMap[i][j] * HEAT_WEIGHT) + (int) (distance * POSITION_WEIGHT);
             }
         }
     }
@@ -128,9 +128,9 @@ public class PathFinder {
             }
 
             routeMap[x][y] = '#';
-            System.out.println("-------------------");
-            MatrixUtil.printMatrix(routeMap);
-            System.out.println("-------------------");
+            //System.out.println("-------------------");
+            //MatrixUtil.printMatrix(routeMap);
+            //System.out.println("-------------------");
 
             if (destinationPos.getFirst() == x && destinationPos.getSecond() == y) {
                 break;
@@ -141,7 +141,6 @@ public class PathFinder {
         System.out.println("VVVVVVVVVVVVVVVV");
         MatrixUtil.printMatrix(routeMap);
         System.out.println("-------------------");
-
 
 
     }
@@ -164,9 +163,11 @@ public class PathFinder {
                 //System.out.println("Skipping as not possible :" + d);
                 continue;
             }
-            int heat = move(d, startX, startY, 1, level);
 
-            //System.out.println("Heat: " + heat + " for " + d);
+            int lev = Math.min(level, distance(startX, startY, destinationPos.getFirst(), destinationPos.getSecond()));
+            int heat = move(d, startX, startY, 1, lev);
+
+            //System.out.println("Heat: " + heat + " for " + d + " level "    + lev + " from " + startX + "," + startY  );
             if (heat < minHeat) {
                 minHeat = heat;
                 bestRoute = new Pair2<>(d, 1);
@@ -204,15 +205,10 @@ public class PathFinder {
     }
 
     int move(Direction direction, int i, int j, int stepsInTheSameDirection, int level) {
+        //System.out.println("Move to direction " + direction + " from " + i + "," + j + " at level  " + level);
 
         int minHeatFromTheDirection = Integer.MAX_VALUE;
         int heatFromTheDirection;
-
-
-        if (level == 0) {
-            return weightedHeatMap[i][j];
-        }
-
 
         switch (direction) {
             case UP -> {
@@ -241,31 +237,23 @@ public class PathFinder {
             }
         }
 
+        if (i == destinationPos.getFirst() && j == destinationPos.getSecond()) {
+            return -10000;
+        }
+
         if (routeMap[i][j] == '#') {
             //already visited
             //System.out.println("Already visited " + i + "," + j);
             return 10000;
         }
-        int heatOfThisPos = weightedHeatMap[i][j];
-
-        if (stepsInTheSameDirection <= 3) {
-            //can go straight only 3 steps
 
 
-            // go forward
-            heatFromTheDirection = switch (direction) {
-                case UP -> move(Direction.UP, i, j, stepsInTheSameDirection + 1, level - 1);
-                case DOWN -> move(Direction.DOWN, i, j, stepsInTheSameDirection + 1, level - 1);
-                case LEFT -> move(Direction.LEFT, i, j, stepsInTheSameDirection + 1, level - 1);
-                case RIGHT -> move(Direction.RIGHT, i, j, stepsInTheSameDirection + 1, level - 1);
-            };
-
-
-            if (heatFromTheDirection < minHeatFromTheDirection) {
-                minHeatFromTheDirection = heatFromTheDirection;
-            }
+        if (level == 0) {
+            return weightedHeatMap[i][j];
         }
 
+
+        int heatOfThisPos = weightedHeatMap[i][j];
 
         // turn right
         heatFromTheDirection = switch (direction) {
@@ -274,6 +262,8 @@ public class PathFinder {
             case LEFT -> move(Direction.UP, i, j, 1, level - 1);
             case UP -> move(Direction.RIGHT, i, j, 1, level - 1);
         };
+
+        //System.out.println("Heat from the direction : " + heatFromTheDirection + " for " + direction + " in level  " + level);
 
         if (heatFromTheDirection < minHeatFromTheDirection) {
             minHeatFromTheDirection = heatFromTheDirection;
@@ -291,12 +281,34 @@ public class PathFinder {
             minHeatFromTheDirection = heatFromTheDirection;
         }
 
+        //System.out.println("Heat from the direction : " + heatFromTheDirection + " for " + direction + " in level  " + level);
+
+        if (stepsInTheSameDirection <= 3) {
+            //can go straight only 3 steps
+
+            // go forward
+            heatFromTheDirection = switch (direction) {
+                case UP -> move(Direction.UP, i, j, stepsInTheSameDirection + 1, level - 1);
+                case DOWN -> move(Direction.DOWN, i, j, stepsInTheSameDirection + 1, level - 1);
+                case LEFT -> move(Direction.LEFT, i, j, stepsInTheSameDirection + 1, level - 1);
+                case RIGHT -> move(Direction.RIGHT, i, j, stepsInTheSameDirection + 1, level - 1);
+            };
+
+            //System.out.println("Heat from the direction : " + heatFromTheDirection + " for " + direction + " in level  " + level);
+
+            if (heatFromTheDirection < minHeatFromTheDirection) {
+                minHeatFromTheDirection = heatFromTheDirection;
+            }
+        }
+
+
+        //System.out.println("Minimum heat  " + minHeatFromTheDirection + " total heat of this position : " + direction + " in level  " + level);
 
         return minHeatFromTheDirection + heatOfThisPos;
     }
 
     int distance(int x1, int y1, int x2, int y2) {
-        return (int) Math.sqrt(Math.pow(Math.abs(x2 - x1),2) + Math.pow(Math.abs(y2 - y1),2));
+        return (int) Math.sqrt(Math.pow(Math.abs(x2 - x1), 2) + Math.pow(Math.abs(y2 - y1), 2));
     }
 
 }
