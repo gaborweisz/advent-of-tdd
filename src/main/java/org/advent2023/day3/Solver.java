@@ -11,7 +11,7 @@ public class Solver {
 
     public static void main(String[] args) {
         var f = new FileReader();
-        List<String> rows = f.readFileAndConvertToStringArray("puzzleinput_day3.txt");
+        List<String> rows = f.readFileAndConvertToStringArray("puzzleinput_2023_day3.txt");
         System.out.printf("Solution for day 3/ a: %d\n" , solvePuzzleA(rows));
         System.out.printf("Solution for day 3/ b: %d\n" ,solvePuzzleB(rows));
     }

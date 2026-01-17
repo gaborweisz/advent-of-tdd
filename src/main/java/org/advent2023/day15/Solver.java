@@ -9,7 +9,7 @@ public class Solver {
 
     public static void main(String[] args) {
         var f = new FileReader();
-        String input = f.readFileAndConvertToString("puzzleinput_day15.txt");
+        String input = f.readFileAndConvertToString("puzzleinput_2023_day15.txt");
         System.out.printf("Solution for day 15 / a : %d \n", solvePuzzleA(input));
         System.out.printf("Solution for day 15 / b : %d \n", solvePuzzleB(input));
     }
