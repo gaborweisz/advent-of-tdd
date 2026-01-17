@@ -7,7 +7,7 @@ import java.util.List;
 
 import static org.hamcrest.Matchers.equalTo;
 
-public class TestSolverShould {
+public class TestSolverPart1Should {
 
     @Test
     void calculate_the_sum_of_the_digits_a() {

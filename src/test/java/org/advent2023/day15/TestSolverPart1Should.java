@@ -5,7 +5,7 @@ import org.junit.jupiter.api.Test;
 
 import static org.hamcrest.Matchers.equalTo;
 
-public class TestSolverShould {
+public class TestSolverPart1Should {
 
     @Test
     void calculate_the_solution_for_puzzle_a() {
