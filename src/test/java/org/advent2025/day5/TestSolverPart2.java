@@ -7,7 +7,7 @@ import java.util.List;
 
 import static org.hamcrest.core.IsEqual.equalTo;
 
-public class TestSolverPart1 {
+public class TestSolverPart2 {
 
 
     /**
@@ -24,12 +24,12 @@ public class TestSolverPart1 {
      * 17
      * 32
      *
-     * The solutions should be 3
+     * The solutions should be 14
      */
 
     @Test
     void test_solvePuzzle() {
-        SolverPart1 solverPart1 = new SolverPart1();
+        SolverPart2 solverPart2 = new SolverPart2();
 
         List<String> input = List.of(
                 "3-5",
@@ -45,6 +45,6 @@ public class TestSolverPart1 {
                 "32"
         );
 
-        MatcherAssert.assertThat(solverPart1.solvePuzzle(input), equalTo(3));
+        MatcherAssert.assertThat(solverPart2.solvePuzzle(input), equalTo(14));
     }
 }
