@@ -13,7 +13,7 @@ public class SolverPart2 {
         var f = new FileReader();
         List<String> rows = f.readFileAndConvertToStringArray("puzzleinput_2025_day1.txt");
 
-        System.out.println("Solution for day 2025 / day 1 / a : " + new SolverPart2().solvePuzzle(rows));
+        System.out.println("Solution for day 2025 / day 1 / b : " + new SolverPart2().solvePuzzle(rows));
     }
 
     class RotationResult {
