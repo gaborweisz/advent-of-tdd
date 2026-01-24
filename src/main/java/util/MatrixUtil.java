@@ -401,6 +401,25 @@ public class MatrixUtil {
     }
 
     /**
+     * Converts the given list of strings to a matrix
+     * @param input the list of strings to be converted
+     * @return the matrix containing the characters in the given list of strings
+     */
+    public static char[][] convertStringListToMatrix(List<String> input) {
+        int rows = input.size();
+        int cols = input.get(0).length();
+        char[][] matrix = new char[rows][cols];
+
+        for (int i = 0; i < rows; i++) {
+            for (int j = 0; j < cols; j++) {
+                matrix[i][j] = input.get(i).charAt(j);
+            }
+        }
+
+        return matrix;
+    }
+
+    /**
      * Checks if the given column index is a vertical mirror axis in the given matrix
      * @param matrix the matrix to be converted
      * @param columnIndex the index of the column to be checked

@@ -235,6 +235,32 @@ public class TestMatrixUtil {
     }
 
     @Test
+    public void  convertStringListToMatrix() {
+        List<String> inputStringList = List.of(
+                "#.##..##.",
+                "..#.##.#.",
+                "##......#",
+                "##......#",
+                "..#.##.#.",
+                "..##..##.",
+                "#.#.##.#."
+        );
+
+        char[][] expectedMatrix = {
+                {'#', '.', '#', '#', '.', '.', '#', '#', '.'},
+                {'.', '.', '#', '.', '#', '#', '.', '#', '.'},
+                {'#', '#', '.', '.', '.', '.', '.', '.', '#'},
+                {'#', '#', '.', '.', '.', '.', '.', '.', '#'},
+                {'.', '.', '#', '.', '#', '#', '.', '#', '.'},
+                {'.', '.', '#', '#', '.', '.', '#', '#', '.'},
+                {'#', '.', '#', '.', '#', '#', '.', '#', '.'}};
+
+        char[][] matrix = MatrixUtil.convertStringListToMatrix(inputStringList);
+
+        MatcherAssert.assertThat(MatrixUtil.areEqual(matrix, expectedMatrix), equalTo(true));
+    }
+
+    @Test
     public void find_vertical_mirror_axis() {
         char[][] matrix = {
                 {'#', '.', '#', '#', '.', '.', '#', '#', '.'},
