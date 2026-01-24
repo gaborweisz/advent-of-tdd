@@ -600,5 +600,42 @@ public class MatrixUtil {
         return newDish;
     }
 
+    public  static int countAdjacentChars(char[][] grid, char targetChar,int row, int col) {
+        int count = 0;
+
+        // Check right
+        if (col + 1 < grid[row].length && grid[row][col + 1] == targetChar)
+            count++;
+
+        // Check left
+        if (col - 1 >= 0 && grid[row][col - 1] == targetChar)
+            count++;
+
+        // Check up
+        if (row - 1 >= 0 && grid[row - 1][col] == targetChar)
+            count++;
+
+        // Check down
+        if (row + 1 < grid.length && grid[row + 1][col] == targetChar)
+            count++;
+
+        //check right down
+        if (row + 1 < grid.length && col + 1 < grid[row].length && grid[row + 1][col + 1] == targetChar)
+            count++;
+
+        //check right up
+        if (row - 1 >= 0 && col + 1 < grid[row].length && grid[row - 1][col + 1] == targetChar)
+            count++;
+
+        //check left down
+        if (row + 1 < grid.length && col - 1 >= 0 && grid[row + 1][col - 1] == targetChar)
+            count++;
+
+        //check left up
+        if (row - 1 >= 0 && col - 1 >= 0 && grid[row - 1][col - 1] == targetChar)
+            count++;
+
+        return count;
+    }
 
 }

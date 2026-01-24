@@ -485,5 +485,20 @@ public class TestMatrixUtil {
         MatcherAssert.assertThat(MatrixUtil.areEqual(result,ListUtil.convertToCharArrayMatrix(expectedResult)), equalTo(true));
     }
 
+    @Test
+    void countAdjacentChars() {
+        List<String> input = List.of(
+                ".....",
+                "..@..",
+                ".@@@.",
+                "..@..",
+                "....."
+        );
+
+        char[][] matrix = MatrixUtil.convertStringListToMatrix(input);
+
+        MatcherAssert.assertThat(MatrixUtil.countAdjacentChars(matrix, '@', 2, 2), equalTo(4));
+
+    }
 
 }
