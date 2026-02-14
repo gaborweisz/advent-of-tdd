@@ -111,6 +111,22 @@ public class MatrixUtil {
     }
 
     /**
+     * Prints the given matrix
+     */
+    public static void printMatrix(long[][] matrix) {
+        for (long[] row : matrix) {
+            for (long cell : row) {
+                if (cell == '\u0000') {
+                    System.out.print('.');
+                } else {
+                    System.out.print(cell + " ");
+                }
+            }
+            System.out.println();
+        }
+    }
+
+    /**
      * Copies the given matrix
      */
     public static char[][]  copyMatrix(char[][] matrix) {
