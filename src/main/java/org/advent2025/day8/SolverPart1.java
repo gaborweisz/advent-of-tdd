@@ -2,10 +2,7 @@ package org.advent2025.day8;
 
 import util.FileReader;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 public class SolverPart1 {
 
@@ -45,6 +42,17 @@ public class SolverPart1 {
             this.jb2 = jb2;
             this.distance = distance;
         }
+        
+        public boolean equals(Object o) {
+            if (this == o) return true;
+            if (o == null || getClass() != o.getClass()) return false;
+            Connection that = (Connection) o;
+            if ((this.jb1.equals(that.jb1) && this.jb2.equals(that.jb2)) || (this.jb1.equals(that.jb2) && this.jb2.equals(that.jb1))) {
+                return true;
+            }
+
+            return false;
+        }
 
 
         @Override
@@ -69,101 +77,53 @@ public class SolverPart1 {
     public long solvePuzzle(List<String> input, int maxNumberOfConnections) {
 
         List<JunctionBox> junctionBoxes = parseInput(input);
+        List<Connection> closesConnections = getClosesConnections(junctionBoxes, maxNumberOfConnections);
+        Map<Integer, List<JunctionBox>> circuitMap = new HashMap<>();
 
 
-        long circuitId = 1;
-        for (int i=0; i<maxNumberOfConnections; i++) {
-            List<JunctionBox> closestBoxes = findClosestBox(junctionBoxes);
-            
-            if (closestBoxes == null) {
-                break;
-            }
+        int circuitId = 1;
+        for (Connection connection : closesConnections) {
 
-            JunctionBox jb1 = closestBoxes.get(0);
-            JunctionBox jb2 = closestBoxes.get(1);
-
-            if (jb1.circuitId == 0 && jb2.circuitId == 0) {
-                jb1.circuitId = circuitId;
-                jb2.circuitId = circuitId;
-                circuitId++;
-
-            } else if (jb1.circuitId != 0 && jb2.circuitId == 0) {
-                jb2.circuitId = jb1.circuitId;
-
-            } else if (jb1.circuitId == 0 && jb2.circuitId != 0) {
-                jb1.circuitId = jb2.circuitId;
-            }
-        }
-
-        Map<Integer, Integer> circuitCounts = new HashMap<>();
-        for (JunctionBox jb : junctionBoxes) {
-            if (jb.circuitId != 0) {
-                circuitCounts.put((int) jb.circuitId, circuitCounts.getOrDefault((int) jb.circuitId, 0) + 1);
-            }
-        }
-
-        for (int cid : circuitCounts.keySet()) {
-            System.out.println("Circuit " + cid + " has " + circuitCounts.get(cid) + " junction boxes.");
-            for (JunctionBox jb : junctionBoxes) {
-                if (jb.circuitId == cid) {
-                    System.out.println("  Junction Box at (" + jb.x + "," + jb.y + "," + jb.z + ")");
-                }
-            }
-        }
-
-        List<Integer> largestCircuits = circuitCounts.values().stream()
-                .sorted(java.util.Comparator.reverseOrder())
-                .limit(3)
-                .toList();
-
-        return largestCircuits.stream().mapToLong(Integer::longValue).reduce(1L, (a, b) -> a * b);
-    }
-
-
-    public long solvePuzzle1(List<String> input, int maxNumberOfConnections) {
-
-        List<JunctionBox> junctionBoxes = parseInput(input);
-        List<Connection> connections = getClosesConnections(junctionBoxes, maxNumberOfConnections);
-
-        long circuitId = 1;
-        for (Connection connection : connections) {
             JunctionBox jb1 = connection.jb1;
             JunctionBox jb2 = connection.jb2;
 
             if (jb1.circuitId == 0 && jb2.circuitId == 0) {
                 jb1.circuitId = circuitId;
                 jb2.circuitId = circuitId;
+                List<JunctionBox> circuits = circuitMap.getOrDefault((int) circuitId, new ArrayList<>());
+                circuits.add(jb1);
+                circuits.add(jb2);
+                circuitMap.put(circuitId, circuits);
                 circuitId++;
+
             } else if (jb1.circuitId != 0 && jb2.circuitId == 0) {
                 jb2.circuitId = jb1.circuitId;
+                List<JunctionBox> circuits = circuitMap.getOrDefault((int) jb1.circuitId, new ArrayList<>());
+                circuits.add(jb2);
+                circuitMap.put((int) jb1.circuitId, circuits);
+
             } else if (jb1.circuitId == 0 && jb2.circuitId != 0) {
                 jb1.circuitId = jb2.circuitId;
+                List<JunctionBox> circuits = circuitMap.getOrDefault((int) jb2.circuitId, new ArrayList<>());
+                circuits.add(jb1);
+                circuitMap.put((int) jb2.circuitId, circuits);
             }
         }
 
-        Map<Integer, Integer> circuitCounts = new HashMap<>();
-        for (JunctionBox jb : junctionBoxes) {
-            if (jb.circuitId != 0) {
-                circuitCounts.put((int) jb.circuitId, circuitCounts.getOrDefault((int) jb.circuitId, 0) + 1);
-            }
-        }
-
-        for (int cid : circuitCounts.keySet()) {
-            System.out.println("Circuit " + cid + " has " + circuitCounts.get(cid) + " junction boxes.");
-            for (JunctionBox jb : junctionBoxes) {
+        for (int cid : circuitMap.keySet()) {
+            System.out.println("Circuit " + cid + " has " + circuitMap.get(cid).size() + " junction boxes.");
+            for (JunctionBox jb : circuitMap.get(cid)) {
                 if (jb.circuitId == cid) {
                     System.out.println("  Junction Box at (" + jb.x + "," + jb.y + "," + jb.z + ")");
                 }
             }
         }
+        
 
-        List<Integer> largestCircuits = circuitCounts.values().stream()
-                .sorted(java.util.Comparator.reverseOrder())
-                .limit(3)
-                .toList();
-
-        return largestCircuits.stream().mapToLong(Integer::longValue).reduce(1L, (a, b) -> a * b);
+        return 0L;
     }
+
+    
 
     List<JunctionBox> parseInput(List<String> input) {
         return input.stream().map(line -> {

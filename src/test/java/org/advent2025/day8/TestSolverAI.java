@@ -7,7 +7,7 @@ import java.util.List;
 
 import static org.hamcrest.core.IsEqual.equalTo;
 
-public class TestSolverPart1 {
+public class TestSolverAI {
 
 
     /**
@@ -37,7 +37,7 @@ public class TestSolverPart1 {
 
     @Test
     void test_solvePuzzle() {
-        SolverPart1 solverPart1 = new SolverPart1();
+        SolverAI solverAi = new SolverAI();
 
         List<String> input = List.of(
                 "162,817,812",
@@ -62,6 +62,6 @@ public class TestSolverPart1 {
                 "425,690,689"
         );
 
-        MatcherAssert.assertThat(solverPart1.solvePuzzle(input, 20), equalTo(40.0));
+        MatcherAssert.assertThat(solverAi.solvePuzzle(input, 10), equalTo(40L));
     }
 }
