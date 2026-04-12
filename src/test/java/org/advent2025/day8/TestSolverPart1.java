@@ -62,6 +62,6 @@ public class TestSolverPart1 {
                 "425,690,689"
         );
 
-        MatcherAssert.assertThat(solverPart1.solvePuzzle(input, 20), equalTo(40.0));
+        MatcherAssert.assertThat(solverPart1.solvePuzzle(input, 10), equalTo(40.0));
     }
 }

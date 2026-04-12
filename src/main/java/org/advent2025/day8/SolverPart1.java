@@ -42,7 +42,7 @@ public class SolverPart1 {
             this.jb2 = jb2;
             this.distance = distance;
         }
-        
+
         public boolean equals(Object o) {
             if (this == o) return true;
             if (o == null || getClass() != o.getClass()) return false;
@@ -78,35 +78,46 @@ public class SolverPart1 {
 
         List<JunctionBox> junctionBoxes = parseInput(input);
         List<Connection> closesConnections = getClosesConnections(junctionBoxes, maxNumberOfConnections);
+        for (Connection closesConnection: closesConnections) {
+            System.out.println("Connection between (" + closesConnection.jb1.x + "," + closesConnection.jb1.y + "," + closesConnection.jb1.z + ") and (" + closesConnection.jb2.x + "," + closesConnection.jb2.y + "," + closesConnection.jb2.z + ") with distance " + closesConnection.distance);
+        }
         Map<Integer, List<JunctionBox>> circuitMap = new HashMap<>();
 
 
         int circuitId = 1;
-        for (Connection connection : closesConnections) {
+        for (int i=0; i<maxNumberOfConnections; i++) {
+            Connection connection = closesConnections.get(i);
 
             JunctionBox jb1 = connection.jb1;
             JunctionBox jb2 = connection.jb2;
 
+            System.out.println("Processing connection between (" + jb1.x + "," + jb1.y + "," + jb1.z + ") and (" + jb2.x + "," + jb2.y + "," + jb2.z + ") with distance " + connection.distance);
+            if (jb1.circuitId != 0 && jb2.circuitId != 0) {
+                System.out.println("Both junction boxes already belong to a circuit, skipping connection between (" + jb1.x + "," + jb1.y + "," + jb1.z + ") and (" + jb2.x + "," + jb2.y + "," + jb2.z + ")");
+                continue;
+            }
+
             if (jb1.circuitId == 0 && jb2.circuitId == 0) {
                 jb1.circuitId = circuitId;
                 jb2.circuitId = circuitId;
-                List<JunctionBox> circuits = circuitMap.getOrDefault((int) circuitId, new ArrayList<>());
+                List<JunctionBox> circuits = new ArrayList<>();
                 circuits.add(jb1);
                 circuits.add(jb2);
                 circuitMap.put(circuitId, circuits);
+                System.out.println("Assigning new circuit id " + circuitId + " to junction boxes at (" + jb1.x + "," + jb1.y + "," + jb1.z + ") and (" + jb2.x + "," + jb2.y + "," + jb2.z + ")");
                 circuitId++;
 
-            } else if (jb1.circuitId != 0 && jb2.circuitId == 0) {
+            } else if (jb1.circuitId != 0) {
                 jb2.circuitId = jb1.circuitId;
-                List<JunctionBox> circuits = circuitMap.getOrDefault((int) jb1.circuitId, new ArrayList<>());
+                List<JunctionBox> circuits = circuitMap.get((int) jb1.circuitId);
                 circuits.add(jb2);
-                circuitMap.put((int) jb1.circuitId, circuits);
+                System.out.println("Assigning existing circuit id " + jb1.circuitId + " to junction box at (" + jb2.x + "," + jb2.y + "," + jb2.z + ") because it is connected to junction box at (" + jb1.x + "," + jb1.y + "," + jb1.z + ")");
 
-            } else if (jb1.circuitId == 0 && jb2.circuitId != 0) {
+            } else if (jb2.circuitId != 0) {
                 jb1.circuitId = jb2.circuitId;
-                List<JunctionBox> circuits = circuitMap.getOrDefault((int) jb2.circuitId, new ArrayList<>());
+                List<JunctionBox> circuits = circuitMap.get((int) jb2.circuitId);
                 circuits.add(jb1);
-                circuitMap.put((int) jb2.circuitId, circuits);
+                System.out.println("Assigning existing circuit id " + jb2.circuitId + " to junction box at (" + jb1.x + "," + jb1.y + "," + jb1.z + ") because it is connected to junction box at (" + jb2.x + "," + jb2.y + "," + jb2.z + ")");
             }
         }
 
@@ -118,33 +129,32 @@ public class SolverPart1 {
                 }
             }
         }
-        
+
 
         return 0L;
     }
 
-    
 
     List<JunctionBox> parseInput(List<String> input) {
         return input.stream().map(line -> {
             String[] parts = line.split(",");
             double x = Double.parseDouble(parts[0]);
             double y = Double.parseDouble(parts[1]);
-            double z = Long.parseLong(parts[2]);
+            double z = Double.parseDouble(parts[2]);
             return new JunctionBox(x, y, z);
         }).toList();
     }
 
     List<Connection> getClosesConnections(List<JunctionBox> junctionBoxes, int maxNumberOfConnections) {
         List<Connection> connections = new java.util.ArrayList<>();
-        for (JunctionBox jb1 : junctionBoxes) {
-            for (JunctionBox jb2 : junctionBoxes) {
-                if (!jb1.equals(jb2)) {
-                    double distance = calculateDistance(jb1, jb2);
-                    Connection connection = new Connection(jb1, jb2, distance);
-                    if (!connections.contains(connection))
-                        connections.add(new Connection(jb1, jb2, distance));
-                }
+        for (int i = 0; i < junctionBoxes.size(); i++) {
+            for (int j = i + 1; j < junctionBoxes.size(); j++) {
+                JunctionBox jb1 = junctionBoxes.get(i);
+                JunctionBox jb2 = junctionBoxes.get(j);
+
+                double distance = calculateDistance(jb1, jb2);
+                Connection connection = new Connection(jb1, jb2, distance);
+                connections.add(connection);
             }
         }
 
